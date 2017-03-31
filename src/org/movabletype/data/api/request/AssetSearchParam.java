@@ -2,28 +2,26 @@ package org.movabletype.data.api.request;
 
 import java.util.LinkedHashMap;
 
-public class SiteSearchParam {
-
-    String user_id;
+public class AssetSearchParam {
+    int site_id;
     String search;
     String searchFields;
     int limit;
     int offset;
+    String _class;
     String sortBy;
     String sortOrder;
     String fields;
-    String includeIds;
-    String excludeIds;
     String dateField;
     String dateFrom;
     String dateTo;
 
-    public String getUser_id() {
-        return user_id;
+    public int getSite_id() {
+        return site_id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setSite_id(int site_id) {
+        this.site_id = site_id;
     }
 
     public String getSearch() {
@@ -58,6 +56,14 @@ public class SiteSearchParam {
         this.offset = offset;
     }
 
+    public String get_Class() {
+        return _class;
+    }
+
+    public void set_Class(String _class) {
+        this._class = _class;
+    }
+
     public String getSortBy() {
         return sortBy;
     }
@@ -80,22 +86,6 @@ public class SiteSearchParam {
 
     public void setFields(String fields) {
         this.fields = fields;
-    }
-
-    public String getIncludeIds() {
-        return includeIds;
-    }
-
-    public void setIncludeIds(String includeIds) {
-        this.includeIds = includeIds;
-    }
-
-    public String getExcludeIds() {
-        return excludeIds;
-    }
-
-    public void setExcludeIds(String excludeIds) {
-        this.excludeIds = excludeIds;
     }
 
     public String getDateField() {
@@ -125,19 +115,22 @@ public class SiteSearchParam {
     public String getQueryString() {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
+        if (site_id != 0)
+            queryItems.put("site_id", site_id);
+        queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
-        if (limit != 0)
-            queryItems.put("limit", limit);
+        if (offset != 0)
+            queryItems.put("offset", limit);
         if (offset != 0)
             queryItems.put("offset", offset);
+        queryItems.put("class", _class);
         queryItems.put("sortBy", sortBy);
         queryItems.put("sortOrder", sortOrder);
         queryItems.put("fields", fields);
-        queryItems.put("includeIds", includeIds);
-        queryItems.put("excludeIds", excludeIds);
         queryItems.put("dateField", dateField);
         queryItems.put("dateFrom", dateFrom);
         queryItems.put("dateTo", dateTo);
         return UrlQueryString.buildQueryString(queryItems);
     }
+
 }

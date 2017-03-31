@@ -2,9 +2,8 @@ package org.movabletype.data.api.request;
 
 import java.util.LinkedHashMap;
 
-public class SiteSearchParam {
-
-    String user_id;
+public class CategorySearchParam {
+    int site_id;
     String search;
     String searchFields;
     int limit;
@@ -14,16 +13,20 @@ public class SiteSearchParam {
     String fields;
     String includeIds;
     String excludeIds;
+    String status;
+    int maxComments;
+    int maxTrackbacks;
+    int no_text_filter;
     String dateField;
     String dateFrom;
     String dateTo;
 
-    public String getUser_id() {
-        return user_id;
+    public int getSite_id() {
+        return site_id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setSite_id(int site_id) {
+        this.site_id = site_id;
     }
 
     public String getSearch() {
@@ -98,6 +101,38 @@ public class SiteSearchParam {
         this.excludeIds = excludeIds;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getMaxComments() {
+        return maxComments;
+    }
+
+    public void setMaxComments(int maxComments) {
+        this.maxComments = maxComments;
+    }
+
+    public int getMaxTrackbacks() {
+        return maxTrackbacks;
+    }
+
+    public void setMaxTrackbacks(int maxTrackbacks) {
+        this.maxTrackbacks = maxTrackbacks;
+    }
+
+    public int getNo_text_filter() {
+        return no_text_filter;
+    }
+
+    public void setNo_text_filter(int no_text_filter) {
+        this.no_text_filter = no_text_filter;
+    }
+
     public String getDateField() {
         return dateField;
     }
@@ -125,9 +160,12 @@ public class SiteSearchParam {
     public String getQueryString() {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
+        if (site_id != 0)
+            queryItems.put("site_id", site_id);
+        queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
-        if (limit != 0)
-            queryItems.put("limit", limit);
+        if (offset != 0)
+            queryItems.put("offset", limit);
         if (offset != 0)
             queryItems.put("offset", offset);
         queryItems.put("sortBy", sortBy);
@@ -135,9 +173,17 @@ public class SiteSearchParam {
         queryItems.put("fields", fields);
         queryItems.put("includeIds", includeIds);
         queryItems.put("excludeIds", excludeIds);
+        queryItems.put("status", status);
+        if (maxComments != 0)
+            queryItems.put("maxComments", maxComments);
+        if (maxTrackbacks != 0)
+            queryItems.put("maxTrackbacks", maxTrackbacks);
+        if (no_text_filter != 0)
+            queryItems.put("no_text_filter", no_text_filter);
         queryItems.put("dateField", dateField);
         queryItems.put("dateFrom", dateFrom);
         queryItems.put("dateTo", dateTo);
         return UrlQueryString.buildQueryString(queryItems);
     }
+
 }
