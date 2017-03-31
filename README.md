@@ -1,7 +1,7 @@
 # Movable Type Data API SDK for Java
 
 ## Requirements
-Java 5.0 or later
+Java 6 or later
 
 ## Usage Example
 ```java
