@@ -1,10 +1,7 @@
 package org.movabletype.data.api.pojo;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -14,39 +11,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "totalResults", "items" })
-public class EntryItems {
+@JsonPropertyOrder({ "message", "code" })
+public class Error {
 
-    @JsonProperty("totalResults")
-    private Integer totalResults;
-    @JsonProperty("items")
-    private List<Entry> items = null;
+    @JsonProperty("message")
+    private String message;
+    @JsonProperty("code")
+    private Integer code;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("totalResults")
-    public Integer getTotalResults() {
-        return totalResults;
+    @JsonProperty("message")
+    public String getMessage() {
+        return message;
     }
 
-    @JsonProperty("totalResults")
-    public void setTotalResults(Integer totalResults) {
-        this.totalResults = totalResults;
+    @JsonProperty("message")
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    @JsonProperty("items")
-    public List<Entry> getItems() {
-        return items;
+    @JsonProperty("code")
+    public Integer getCode() {
+        return code;
     }
 
-    @JsonProperty("items")
-    public void setItems(List<Entry> items) {
-        this.items = items;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    @JsonProperty("code")
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     @JsonAnyGetter

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,12 +13,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "totalResults", "items" })
-public class EntryItems {
+public class AssetItems {
 
     @JsonProperty("totalResults")
     private Integer totalResults;
     @JsonProperty("items")
-    private List<Entry> items = null;
+    private List<Asset> items = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -35,18 +33,13 @@ public class EntryItems {
     }
 
     @JsonProperty("items")
-    public List<Entry> getItems() {
+    public List<Asset> getItems() {
         return items;
     }
 
     @JsonProperty("items")
-    public void setItems(List<Entry> items) {
+    public void setItems(List<Asset> items) {
         this.items = items;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
     @JsonAnyGetter

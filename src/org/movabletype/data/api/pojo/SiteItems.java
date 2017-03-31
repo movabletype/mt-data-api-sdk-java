@@ -18,7 +18,7 @@ public class SiteItems {
     @JsonProperty("totalResults")
     private Integer totalResults;
     @JsonProperty("items")
-    private List<SiteItem> items = null;
+    private List<Site> items = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -33,12 +33,12 @@ public class SiteItems {
     }
 
     @JsonProperty("items")
-    public List<SiteItem> getItems() {
+    public List<Site> getItems() {
         return items;
     }
 
     @JsonProperty("items")
-    public void setItems(List<SiteItem> items) {
+    public void setItems(List<Site> items) {
         this.items = items;
     }
 

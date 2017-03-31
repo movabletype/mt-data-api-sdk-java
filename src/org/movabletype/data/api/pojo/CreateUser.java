@@ -3,8 +3,6 @@ package org.movabletype.data.api.pojo;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,24 +11,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userpicUrl", "displayName" })
-public class Author {
+@JsonPropertyOrder({ "email", "displayName", "name", "password" })
+public class CreateUser {
 
-    @JsonProperty("userpicUrl")
-    private String userpicUrl;
+    @JsonProperty("email")
+    private String email;
     @JsonProperty("displayName")
     private String displayName;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("password")
+    private String password;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("userpicUrl")
-    public Object getUserpicUrl() {
-        return userpicUrl;
+    @JsonProperty("email")
+    public String getEmail() {
+        return email;
     }
 
-    @JsonProperty("userpicUrl")
-    public void setUserpicUrl(String userpicUrl) {
-        this.userpicUrl = userpicUrl;
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @JsonProperty("displayName")
@@ -43,9 +45,24 @@ public class Author {
         this.displayName = displayName;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonProperty("password")
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty("password")
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @JsonAnyGetter

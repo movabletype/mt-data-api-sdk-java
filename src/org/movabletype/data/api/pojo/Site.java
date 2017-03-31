@@ -13,15 +13,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "serverOffset", "themeId", "statusDefault", "autodiscoverLinks", "useRevision", "relativeUrl", "entryCustomPrefs", "archivePath",
-        "useCommentConfirmation", "url", "smartReplaceFields", "modifiedBy", "timezone", "daysOrPosts", "sortOrderPosts", "name", "convertParas",
-        "description", "includeSystem", "archiveUrl", "allowCommentHtml", "fileExtension", "smartReplace", "junkFolderExpiry", "publishEmptyArchive",
-        "dateLanguage", "listOnIndex", "pingWeblogs", "emailNewComments", "language", "autolinkUrls", "sanitizeSpec", "customFields", "emailNewPings",
-        "nofollowUrls", "createdBy", "pingGoogle", "convertParasComments", "sitePath", "id", "parent", "archiveTypePreferred", "contentCss",
-        "junkScoreThreshold", "internalAutodiscovery", "createdDate", "class", "moderateComments", "allowCommentsDefault", "includeCache",
-        "allowCommenterRegist", "maxRevisionsEntry", "updatable", "requireCommentEmails", "ccLicenseImage", "allowComments", "allowPingsDefault", "pingOthers",
-        "dynamicCache", "basenameLimit", "modifiedDate", "dynamicConditional", "pageCustomPrefs", "allowPings", "commenterAuthenticators", "host",
-        "ccLicenseUrl", "newCreatedUserRoles", "wordsInExcerpt", "sortOrderComments", "followAuthLinks", "allowUnregComments", "maxRevisionsTemplate",
-        "moderatePings", "customDynamicTemplates" })
+        "useCommentConfirmation", "url", "smartReplaceFields", "modifiedBy", "operationIfExists", "timezone", "daysOrPosts", "sortOrderPosts", "name",
+        "convertParas", "description", "autoRenameNonAscii", "includeSystem", "archiveUrl", "allowCommentHtml", "fileExtension", "smartReplace",
+        "junkFolderExpiry", "publishEmptyArchive", "dateLanguage", "listOnIndex", "pingWeblogs", "extraPath", "normalizeOrientation", "emailNewComments",
+        "language", "autolinkUrls", "sanitizeSpec", "customFields", "emailNewPings", "nofollowUrls", "createdBy", "pingGoogle", "convertParasComments",
+        "sitePath", "id", "parent", "archiveTypePreferred", "contentCss", "junkScoreThreshold", "internalAutodiscovery", "createdDate", "class",
+        "moderateComments", "allowCommentsDefault", "includeCache", "allowCommenterRegist", "allowToChangeAtUpload", "uploadDestination", "maxRevisionsEntry",
+        "updatable", "requireCommentEmails", "ccLicenseImage", "allowComments", "allowPingsDefault", "pingOthers", "basenameLimit", "dynamicCache",
+        "modifiedDate", "allowPings", "pageCustomPrefs", "dynamicConditional", "commenterAuthenticators", "host", "ccLicenseUrl", "newCreatedUserRoles",
+        "wordsInExcerpt", "sortOrderComments", "followAuthLinks", "allowUnregComments", "maxRevisionsTemplate", "moderatePings", "customDynamicTemplates" })
 public class Site {
 
     @JsonProperty("serverOffset")
@@ -48,6 +48,8 @@ public class Site {
     private List<String> smartReplaceFields = null;
     @JsonProperty("modifiedBy")
     private ModifiedBy modifiedBy;
+    @JsonProperty("operationIfExists")
+    private String operationIfExists;
     @JsonProperty("timezone")
     private String timezone;
     @JsonProperty("daysOrPosts")
@@ -60,6 +62,8 @@ public class Site {
     private String convertParas;
     @JsonProperty("description")
     private String description;
+    @JsonProperty("autoRenameNonAscii")
+    private Boolean autoRenameNonAscii;
     @JsonProperty("includeSystem")
     private String includeSystem;
     @JsonProperty("archiveUrl")
@@ -69,7 +73,7 @@ public class Site {
     @JsonProperty("fileExtension")
     private String fileExtension;
     @JsonProperty("smartReplace")
-    private String smartReplace;
+    private Integer smartReplace;
     @JsonProperty("junkFolderExpiry")
     private String junkFolderExpiry;
     @JsonProperty("publishEmptyArchive")
@@ -80,6 +84,10 @@ public class Site {
     private String listOnIndex;
     @JsonProperty("pingWeblogs")
     private Boolean pingWeblogs;
+    @JsonProperty("extraPath")
+    private String extraPath;
+    @JsonProperty("normalizeOrientation")
+    private Boolean normalizeOrientation;
     @JsonProperty("emailNewComments")
     private String emailNewComments;
     @JsonProperty("language")
@@ -105,7 +113,7 @@ public class Site {
     @JsonProperty("id")
     private String id;
     @JsonProperty("parent")
-    private Parent parent;
+    private Object parent;
     @JsonProperty("archiveTypePreferred")
     private String archiveTypePreferred;
     @JsonProperty("contentCss")
@@ -126,6 +134,10 @@ public class Site {
     private Boolean includeCache;
     @JsonProperty("allowCommenterRegist")
     private Boolean allowCommenterRegist;
+    @JsonProperty("allowToChangeAtUpload")
+    private Boolean allowToChangeAtUpload;
+    @JsonProperty("uploadDestination")
+    private UploadDestination uploadDestination;
     @JsonProperty("maxRevisionsEntry")
     private String maxRevisionsEntry;
     @JsonProperty("updatable")
@@ -140,18 +152,18 @@ public class Site {
     private Boolean allowPingsDefault;
     @JsonProperty("pingOthers")
     private List<Object> pingOthers = null;
-    @JsonProperty("dynamicCache")
-    private Boolean dynamicCache;
     @JsonProperty("basenameLimit")
     private String basenameLimit;
+    @JsonProperty("dynamicCache")
+    private Boolean dynamicCache;
     @JsonProperty("modifiedDate")
     private String modifiedDate;
-    @JsonProperty("dynamicConditional")
-    private Boolean dynamicConditional;
-    @JsonProperty("pageCustomPrefs")
-    private List<String> pageCustomPrefs = null;
     @JsonProperty("allowPings")
     private Boolean allowPings;
+    @JsonProperty("pageCustomPrefs")
+    private List<String> pageCustomPrefs = null;
+    @JsonProperty("dynamicConditional")
+    private Boolean dynamicConditional;
     @JsonProperty("commenterAuthenticators")
     private List<String> commenterAuthenticators = null;
     @JsonProperty("host")
@@ -297,6 +309,16 @@ public class Site {
         this.modifiedBy = modifiedBy;
     }
 
+    @JsonProperty("operationIfExists")
+    public String getOperationIfExists() {
+        return operationIfExists;
+    }
+
+    @JsonProperty("operationIfExists")
+    public void setOperationIfExists(String operationIfExists) {
+        this.operationIfExists = operationIfExists;
+    }
+
     @JsonProperty("timezone")
     public String getTimezone() {
         return timezone;
@@ -357,6 +379,16 @@ public class Site {
         this.description = description;
     }
 
+    @JsonProperty("autoRenameNonAscii")
+    public Boolean getAutoRenameNonAscii() {
+        return autoRenameNonAscii;
+    }
+
+    @JsonProperty("autoRenameNonAscii")
+    public void setAutoRenameNonAscii(Boolean autoRenameNonAscii) {
+        this.autoRenameNonAscii = autoRenameNonAscii;
+    }
+
     @JsonProperty("includeSystem")
     public String getIncludeSystem() {
         return includeSystem;
@@ -398,12 +430,12 @@ public class Site {
     }
 
     @JsonProperty("smartReplace")
-    public String getSmartReplace() {
+    public Integer getSmartReplace() {
         return smartReplace;
     }
 
     @JsonProperty("smartReplace")
-    public void setSmartReplace(String smartReplace) {
+    public void setSmartReplace(Integer smartReplace) {
         this.smartReplace = smartReplace;
     }
 
@@ -455,6 +487,26 @@ public class Site {
     @JsonProperty("pingWeblogs")
     public void setPingWeblogs(Boolean pingWeblogs) {
         this.pingWeblogs = pingWeblogs;
+    }
+
+    @JsonProperty("extraPath")
+    public String getExtraPath() {
+        return extraPath;
+    }
+
+    @JsonProperty("extraPath")
+    public void setExtraPath(String extraPath) {
+        this.extraPath = extraPath;
+    }
+
+    @JsonProperty("normalizeOrientation")
+    public Boolean getNormalizeOrientation() {
+        return normalizeOrientation;
+    }
+
+    @JsonProperty("normalizeOrientation")
+    public void setNormalizeOrientation(Boolean normalizeOrientation) {
+        this.normalizeOrientation = normalizeOrientation;
     }
 
     @JsonProperty("emailNewComments")
@@ -578,12 +630,12 @@ public class Site {
     }
 
     @JsonProperty("parent")
-    public Parent getParent() {
+    public Object getParent() {
         return parent;
     }
 
     @JsonProperty("parent")
-    public void setParent(Parent parent) {
+    public void setParent(Object parent) {
         this.parent = parent;
     }
 
@@ -687,6 +739,26 @@ public class Site {
         this.allowCommenterRegist = allowCommenterRegist;
     }
 
+    @JsonProperty("allowToChangeAtUpload")
+    public Boolean getAllowToChangeAtUpload() {
+        return allowToChangeAtUpload;
+    }
+
+    @JsonProperty("allowToChangeAtUpload")
+    public void setAllowToChangeAtUpload(Boolean allowToChangeAtUpload) {
+        this.allowToChangeAtUpload = allowToChangeAtUpload;
+    }
+
+    @JsonProperty("uploadDestination")
+    public UploadDestination getUploadDestination() {
+        return uploadDestination;
+    }
+
+    @JsonProperty("uploadDestination")
+    public void setUploadDestination(UploadDestination uploadDestination) {
+        this.uploadDestination = uploadDestination;
+    }
+
     @JsonProperty("maxRevisionsEntry")
     public String getMaxRevisionsEntry() {
         return maxRevisionsEntry;
@@ -757,16 +829,6 @@ public class Site {
         this.pingOthers = pingOthers;
     }
 
-    @JsonProperty("dynamicCache")
-    public Boolean getDynamicCache() {
-        return dynamicCache;
-    }
-
-    @JsonProperty("dynamicCache")
-    public void setDynamicCache(Boolean dynamicCache) {
-        this.dynamicCache = dynamicCache;
-    }
-
     @JsonProperty("basenameLimit")
     public String getBasenameLimit() {
         return basenameLimit;
@@ -775,6 +837,16 @@ public class Site {
     @JsonProperty("basenameLimit")
     public void setBasenameLimit(String basenameLimit) {
         this.basenameLimit = basenameLimit;
+    }
+
+    @JsonProperty("dynamicCache")
+    public Boolean getDynamicCache() {
+        return dynamicCache;
+    }
+
+    @JsonProperty("dynamicCache")
+    public void setDynamicCache(Boolean dynamicCache) {
+        this.dynamicCache = dynamicCache;
     }
 
     @JsonProperty("modifiedDate")
@@ -787,14 +859,14 @@ public class Site {
         this.modifiedDate = modifiedDate;
     }
 
-    @JsonProperty("dynamicConditional")
-    public Boolean getDynamicConditional() {
-        return dynamicConditional;
+    @JsonProperty("allowPings")
+    public Boolean getAllowPings() {
+        return allowPings;
     }
 
-    @JsonProperty("dynamicConditional")
-    public void setDynamicConditional(Boolean dynamicConditional) {
-        this.dynamicConditional = dynamicConditional;
+    @JsonProperty("allowPings")
+    public void setAllowPings(Boolean allowPings) {
+        this.allowPings = allowPings;
     }
 
     @JsonProperty("pageCustomPrefs")
@@ -807,14 +879,14 @@ public class Site {
         this.pageCustomPrefs = pageCustomPrefs;
     }
 
-    @JsonProperty("allowPings")
-    public Boolean getAllowPings() {
-        return allowPings;
+    @JsonProperty("dynamicConditional")
+    public Boolean getDynamicConditional() {
+        return dynamicConditional;
     }
 
-    @JsonProperty("allowPings")
-    public void setAllowPings(Boolean allowPings) {
-        this.allowPings = allowPings;
+    @JsonProperty("dynamicConditional")
+    public void setDynamicConditional(Boolean dynamicConditional) {
+        this.dynamicConditional = dynamicConditional;
     }
 
     @JsonProperty("commenterAuthenticators")
