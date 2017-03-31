@@ -131,7 +131,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * @param username
      * @param password
      * @param clientId
-     * @param endpoint2
+     * @param endpoint
      * @param authUsername
      * @param authPassword
      * @throws KeyManagementException
