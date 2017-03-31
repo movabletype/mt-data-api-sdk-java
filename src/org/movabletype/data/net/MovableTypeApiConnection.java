@@ -21,21 +21,37 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.commons.codec.binary.Base64;
+import org.movabletype.data.api.pojo.Token;
+
 public class MovableTypeApiConnection {
 
-    public HttpURLConnection urlconn = null;
-    public String useragent = "MovableType DataAPI Java Client/v3";
+    private HttpURLConnection urlconn;
+
+    private Token token;
+    private String authUsername;
+    private String authPassword;
+    private String useragent = "MovableType DataAPI Java Client/v3";
+
+    /*
+     * MovableTypeApiConnection
+     */
+    public MovableTypeApiConnection() {
+        super();
+    }
 
     /**
+     * connectUrl
+     * 
      * @param url
+     * @throws IOException
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
-     * @throws IOException
      */
-    public MovableTypeApiConnection(String url) throws NoSuchAlgorithmException, KeyManagementException, IOException {
+    public void connectUrl(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         URL connectURL = new URL(url);
         if ("https".equals(connectURL.getProtocol())) {
-            // Cert info
+            // Certificate information return all empty
             TrustManager[] tm = { new X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
@@ -51,7 +67,7 @@ public class MovableTypeApiConnection {
             } };
             SSLContext sslcontext = SSLContext.getInstance("SSL");
             sslcontext.init(null, tm, null);
-            // Check host
+            // Host name verification rule Return true if anything comes in
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
@@ -63,8 +79,73 @@ public class MovableTypeApiConnection {
         } else {
             urlconn = (HttpURLConnection) connectURL.openConnection();
         }
+        if (authUsername != null && authPassword != null) {
+            String auth = authUsername + ":" + authPassword;
+            urlconn.setRequestProperty("Authorization", "Basic " + Base64.encodeBase64(auth.getBytes()));
+        }
+        if (token != null) {
+            urlconn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
+        }
         urlconn.setRequestProperty("User-Agent", useragent);
         urlconn.setInstanceFollowRedirects(false);
+    }
+
+    /**
+     * setToken
+     * 
+     * @param token
+     */
+    public void setToken(Token token) {
+        this.token = token;
+    }
+
+    /**
+     * setBasicAuthentication
+     * 
+     * @param authUsername
+     * @param authPassword
+     */
+    public void setBasicAuthentication(String authUsername, String authPassword) {
+        this.authUsername = authUsername;
+        this.authPassword = authPassword;
+    }
+
+    /**
+     * getResponseBody
+     * 
+     * @return Response Body
+     * @throws IOException
+     */
+    public String getResponseBody() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlconn.getInputStream(), "utf8"));
+        String line;
+        StringBuilder sb = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        reader.close();
+        return sb.toString();
+    }
+
+    /**
+     * addBodyPart
+     * 
+     * @param body
+     * @throws IOException
+     */
+    public void addBodyPart(String body) throws IOException {
+        OutputStreamWriter writer = new OutputStreamWriter(urlconn.getOutputStream());
+        writer.write(body);
+        writer.flush();
+    }
+
+    /**
+     * getUserAgent
+     * 
+     * @return
+     */
+    public String getUserAgent() {
+        return useragent;
     }
 
     public void setRequestMethod(String method) throws ProtocolException {
@@ -114,26 +195,4 @@ public class MovableTypeApiConnection {
     public void setRequestProperty(String key, String value) {
         urlconn.setRequestProperty(key, value);
     }
-
-    public String getResponseBody() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(urlconn.getInputStream(), "utf8"));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-        reader.close();
-        return sb.toString();
-    }
-
-    public void addBodyPart(String body) throws IOException {
-        OutputStreamWriter writer = new OutputStreamWriter(urlconn.getOutputStream());
-        writer.write(body);
-        writer.flush();
-    }
-
-    public String getUserAgent() {
-        return useragent;
-    }
-
 }
