@@ -17,7 +17,7 @@ int siteId = 1;
 Entry entry = new Entry();
 entry.setTitle("Title");
 entry.setBody("Body");
-entry.setStatus("Publish");
+entry.setStatus(EntryStatus.PUBLISH);
 Entry postEntry = client.postEntry(siteId, entry);
 ```
 
