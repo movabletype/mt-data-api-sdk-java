@@ -11,9 +11,12 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
-import org.movabletype.data.api.pojo.AddUser;
 import org.movabletype.data.api.pojo.Asset;
+import org.movabletype.data.api.pojo.AssetItems;
 import org.movabletype.data.api.pojo.Authentication;
+import org.movabletype.data.api.pojo.Category;
+import org.movabletype.data.api.pojo.CategoryItems;
+import org.movabletype.data.api.pojo.CreateUser;
 import org.movabletype.data.api.pojo.Entry;
 import org.movabletype.data.api.pojo.EntryItems;
 import org.movabletype.data.api.pojo.Site;
@@ -23,6 +26,8 @@ import org.movabletype.data.api.pojo.Token;
 import org.movabletype.data.api.pojo.User;
 import org.movabletype.data.api.pojo.UserItems;
 import org.movabletype.data.api.pojo.Version;
+import org.movabletype.data.api.request.AssetSearchParam;
+import org.movabletype.data.api.request.CategorySearchParam;
 import org.movabletype.data.api.request.EntrySearchParam;
 import org.movabletype.data.api.request.SiteSearchParam;
 import org.movabletype.data.api.request.UploadParam;
@@ -37,7 +42,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     private Token token;
-
     private long expire;
     private String version;
     private String endpoint;
@@ -64,15 +68,15 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public Version getVersion() throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        this.getToken();
         Version apiversion = null;
         String url = endpoint + "/" + version + "/version";
-        conn = new MovableTypeApiConnection(url);
-        conn.setRequestMethod("GET");
-        conn.connect();
+        MovableTypeApiConnection localConn = new MovableTypeApiConnection();
+        localConn.connectUrl(url);
+        localConn.setRequestMethod("GET");
+        localConn.connect();
         ObjectMapper mapper = new ObjectMapper();
-        apiversion = mapper.readValue(conn.getResponseBody(), Version.class);
-        conn.disconnect();
+        apiversion = mapper.readValue(localConn.getResponseBody(), Version.class);
+        localConn.disconnect();
         return apiversion;
     }
 
@@ -113,9 +117,37 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         expire = 0L;
         version = "v3";
         String url = endpoint + "/" + version + "/authentication?username=" + username + "&password=" + password + "&clientId=" + clientId;
-        conn = new MovableTypeApiConnection(url);
+        conn = new MovableTypeApiConnection();
+        conn.connectUrl(url);
         conn.setRequestMethod("POST");
-        conn.connect();
+        ObjectMapper mapper = new ObjectMapper();
+        authentication = mapper.readValue(conn.getResponseBody(), Authentication.class);
+        conn.disconnect();
+    }
+
+    /**
+     * MovableTypeApiClientImpl - Basic Authentication
+     * 
+     * @param username
+     * @param password
+     * @param clientId
+     * @param endpoint2
+     * @param authUsername
+     * @param authPassword
+     * @throws KeyManagementException
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    public MovableTypeApiClientImpl(String username, String password, String clientId, String endpoint, String authUsername, String authPassword)
+            throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        this.endpoint = endpoint;
+        expire = 0L;
+        version = "v3";
+        String url = endpoint + "/" + version + "/authentication?username=" + username + "&password=" + password + "&clientId=" + clientId;
+        conn = new MovableTypeApiConnection();
+        conn.connectUrl(url);
+        conn.setRequestMethod("POST");
+        conn.setBasicAuthentication(authUsername, authPassword);
         ObjectMapper mapper = new ObjectMapper();
         authentication = mapper.readValue(conn.getResponseBody(), Authentication.class);
         conn.disconnect();
@@ -124,26 +156,23 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     /**
      * getToken
      * 
-     * @return Token
+     * @return
      * @throws KeyManagementException
      * @throws NoSuchAlgorithmException
      * @throws IOException
      */
     private Token getToken() throws KeyManagementException, NoSuchAlgorithmException, IOException {
         Long now = System.currentTimeMillis() / 1000L;
-        if (expire > now) {
-            // System.out.println("reuse session");
+        if (expire > now)
             return token;
-        }
-        // System.out.println("get session");
         String url = endpoint + "/" + version + "/token";
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("POST");
         conn.addRequestProperty("X-MT-Authorization", "MTAuth sessionId=" + authentication.getSessionId());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         token = mapper.readValue(conn.getResponseBody(), Token.class);
         conn.disconnect();
+        conn.setToken(token);
         expire = System.currentTimeMillis() / 1000L + token.getExpiresIn();
         return token;
     }
@@ -154,33 +183,27 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Status signOut() throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        this.getToken();
-        String url = endpoint + "/" + version + "/authentication";
-
-        conn = new MovableTypeApiConnection(url);
-        conn.setRequestMethod("DELETE");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
-        ObjectMapper mapper = new ObjectMapper();
-        Status status = mapper.readValue(conn.getResponseBody(), Status.class);
-        conn.disconnect();
-        return status;
-    }
-
-    @Override
     public Status deleteToken() throws KeyManagementException, NoSuchAlgorithmException, IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/token";
-
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("DELETE");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         Status status = mapper.readValue(conn.getResponseBody(), Status.class);
         conn.disconnect();
         expire = 0;
+        return status;
+    }
+
+    @Override
+    public Status signOut() throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/authentication";
+        conn.connectUrl(url);
+        conn.setRequestMethod("DELETE");
+        ObjectMapper mapper = new ObjectMapper();
+        Status status = mapper.readValue(conn.getResponseBody(), Status.class);
+        conn.disconnect();
         return status;
     }
 
@@ -193,15 +216,13 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     public Site createWebsite(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites";
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(site);
         conn.addBodyPart("website=" + json);
-        conn.connect();
         Site createSite = mapper.readValue(conn.getResponseBody(), Site.class);
         conn.disconnect();
         return createSite;
@@ -209,31 +230,32 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public Site createBlog(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id;
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
+
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(site);
+        System.out.println(json);
         conn.addBodyPart("blog=" + json);
-        conn.connect();
-        conn.getResponseBody();
         Site createSite = mapper.readValue(conn.getResponseBody(), Site.class);
         conn.disconnect();
         return createSite;
     }
 
     @Override
-    public Site deleteSite(int id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site deleteSite(int site_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
-        String url = endpoint + "/" + version + "/sites/" + id;
-        conn = new MovableTypeApiConnection(url);
+        String url = endpoint + "/" + version + "/sites/" + site_id;
+        conn.connectUrl(url);
         conn.setRequestMethod("DELETE");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         Site deleteSite = mapper.readValue(conn.getResponseBody(), Site.class);
         conn.disconnect();
@@ -241,17 +263,49 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public SiteItems getSites(SiteSearchParam siteSearchParam) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site getSite(int site_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        this.getToken();
+        if (fields == null)
+            fields = "";
+        String url = endpoint + "/" + version + "/sites/" + site_id + "?" + fields;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        Site site = mapper.readValue(conn.getResponseBody(), Site.class);
+        conn.disconnect();
+        return site;
+    }
+
+    @Override
+    public SiteItems searchSites(SiteSearchParam siteSearchParam) throws KeyManagementException, NoSuchAlgorithmException, IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites?" + siteSearchParam.getQueryString();
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("GET");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         SiteItems siteItems = mapper.readValue(conn.getResponseBody(), SiteItems.class);
         conn.disconnect();
         return siteItems;
+    }
+
+    @Override
+    public Site updateSite(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id;
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(site);
+        conn.addBodyPart("website=" + json);
+        site = mapper.readValue(conn.getResponseBody(), Site.class);
+        conn.disconnect();
+        return site;
     }
 
     /******************************************************
@@ -259,17 +313,17 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      ******************************************************/
     @Override
     public Entry postEntry(int site_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries";
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry);
         conn.addBodyPart("entry=" + json);
-        conn.connect();
         Entry postedEntry = mapper.readValue(conn.getResponseBody(), Entry.class);
         conn.disconnect();
         return postedEntry;
@@ -277,12 +331,14 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public Entry deleteEntry(int site_id, Integer entry_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (entry_id <= 0)
+            throw new MovableTypeArgumentException("entry_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id;
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("DELETE");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         Entry deleteEntry = mapper.readValue(conn.getResponseBody(), Entry.class);
         conn.disconnect();
@@ -291,12 +347,12 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public EntryItems getEntries(int site_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries";
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("GET");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         EntryItems entries = mapper.readValue(conn.getResponseBody(), EntryItems.class);
         conn.disconnect();
@@ -304,31 +360,69 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
+    public Entry getEntry(int site_id, int entry_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (entry_id <= 0)
+            throw new MovableTypeArgumentException("entry_id parameter is required");
+        this.getToken();
+        if (fields == null)
+            fields = "";
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id + "?" + fields;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        Entry entry = mapper.readValue(conn.getResponseBody(), Entry.class);
+        conn.disconnect();
+        return entry;
+    }
+
+    @Override
     public EntryItems searchEntry(EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        // TODO Auto-generated method stub
-        if (search.getSearch() == null) {
-            throw new MovableTypeArgumentException("Search parameter is required");
-        }
         this.getToken();
         String url = endpoint + "/" + version + "/search?" + search.getQueryString();
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("GET");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         EntryItems entries = mapper.readValue(conn.getResponseBody(), EntryItems.class);
         conn.disconnect();
         return entries;
+    }
+
+    @Override
+    public Entry updateEntry(int site_id, int entry_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (entry_id <= 0)
+            throw new MovableTypeArgumentException("entry_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id;
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry);
+        conn.addBodyPart("entry=" + json);
+        entry = mapper.readValue(conn.getResponseBody(), Entry.class);
+        conn.disconnect();
+        return entry;
     }
 
     /******************************************************
      * Asset
      ******************************************************/
+
     @SuppressWarnings("rawtypes")
     @Override
     public Asset uploadAsset(UploadParam upload) throws IOException, KeyManagementException, NoSuchAlgorithmException {
+        if (upload.getSite_id() <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (upload.getUploadPath() == null)
+            throw new MovableTypeArgumentException("uploadPath parameter is required");
+        if (upload.getUploadLocalfile() == null)
+            throw new MovableTypeArgumentException("uploadLocalfile parameter is required");
         this.getToken();
-
         String overwrite = "";
         if (upload.isOverwrite_once() == true)
             overwrite = "?overwrite_once=1";
@@ -337,14 +431,12 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         String CRLF = "\r\n";
         String charset = "UTF-8";
         String boundary = "---------------------------" + Long.toString(System.currentTimeMillis());
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("POST");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
         conn.setDoOutput(true);
         conn.setDoInput(true);
         conn.setUseCaches(false);
         conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        conn.connect();
         OutputStream outputStream = conn.getOutputStream();
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, charset), true);
         HashMap<String, Comparable> requestBody = new HashMap<String, Comparable>();
@@ -386,50 +478,169 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public Asset deleteAsset(int site_id, int asset_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (asset_id <= 0)
+            throw new MovableTypeArgumentException("asset_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id;
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("DELETE");
-
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         Asset asset = mapper.readValue(conn.getResponseBody(), Asset.class);
         conn.disconnect();
-
         return asset;
+    }
+
+    @Override
+    public Asset getAsset(int site_id, int asset_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (asset_id <= 0)
+            throw new MovableTypeArgumentException("asset_id parameter is required");
+        this.getToken();
+        if (fields == null)
+            fields = "";
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id + "?" + fields;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        Asset asset = mapper.readValue(conn.getResponseBody(), Asset.class);
+        conn.disconnect();
+        return asset;
+    }
+
+    @Override
+    public AssetItems searchAsset(int site_id, AssetSearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/assets?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        AssetItems assets = mapper.readValue(conn.getResponseBody(), AssetItems.class);
+        conn.disconnect();
+        return assets;
+    }
+
+    /******************************************************
+     * Category
+     ******************************************************/
+
+    @Override
+    public Category createCategory(int site_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories";
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(category);
+        conn.addBodyPart("category=" + json);
+        category = mapper.readValue(conn.getResponseBody(), Category.class);
+        conn.disconnect();
+        return category;
+    }
+
+    @Override
+    public Category deleteCategory(int site_id, int category_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (category_id <= 0)
+            throw new MovableTypeArgumentException("category_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id;
+        conn.connectUrl(url);
+        conn.setRequestMethod("DELETE");
+        ObjectMapper mapper = new ObjectMapper();
+        Category category = mapper.readValue(conn.getResponseBody(), Category.class);
+        conn.disconnect();
+        return category;
+    }
+
+    @Override
+    public Category getCategory(int site_id, int category_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (category_id <= 0)
+            throw new MovableTypeArgumentException("category_id parameter is required");
+        this.getToken();
+        if (fields == null)
+            fields = "";
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id + "?" + fields;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        Category category = mapper.readValue(conn.getResponseBody(), Category.class);
+        conn.disconnect();
+        return category;
+    }
+
+    @Override
+    public CategoryItems searchCategory(int site_id, CategorySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        CategoryItems entries = mapper.readValue(conn.getResponseBody(), CategoryItems.class);
+        conn.disconnect();
+        return entries;
+    }
+
+    @Override
+    public Category updateCategory(int site_id, int category_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        if (category_id <= 0)
+            throw new MovableTypeArgumentException("category_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id;
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(category);
+        conn.addBodyPart("category=" + json);
+        category = mapper.readValue(conn.getResponseBody(), Category.class);
+        conn.disconnect();
+        return category;
     }
 
     /******************************************************
      * User
      ******************************************************/
+
     @Override
-    public User createUser(AddUser addUser) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public User createUser(CreateUser createUser) throws KeyManagementException, NoSuchAlgorithmException, IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/users";
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(addUser);
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(createUser);
         conn.addBodyPart("user=" + json);
-        conn.connect();
-        User createUser = mapper.readValue(conn.getResponseBody(), User.class);
+        User user = mapper.readValue(conn.getResponseBody(), User.class);
         conn.disconnect();
-        return createUser;
+        return user;
     }
 
     @Override
     public User deleteUser(int user_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (user_id <= 0)
+            throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/users/" + user_id;
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("DELETE");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         User deleteUser = mapper.readValue(conn.getResponseBody(), User.class);
         conn.disconnect();
@@ -438,34 +649,25 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public UserItems searchUser(UserSearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        // TODO Auto-generated method stub
-        if (search.getSearch() == null) {
-            throw new MovableTypeArgumentException("Search parameter is required");
-        }
-
         this.getToken();
         UserItems userItems = null;
         String url = endpoint + "/" + version + "/users?" + search.getQueryString();
-
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("GET");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         userItems = mapper.readValue(conn.getResponseBody(), UserItems.class);
         conn.disconnect();
-
         return userItems;
     }
 
     @Override
     public User getUser(String user_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (user_id == null)
+            throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/users/" + user_id + "?" + fields;
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("GET");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
         User user = mapper.readValue(conn.getResponseBody(), User.class);
         conn.disconnect();
@@ -474,17 +676,17 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public User updateUser(int user_id, User user) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (user_id <= 0)
+            throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/users/" + user_id;
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setDoOutput(true);
         conn.setRequestMethod("PUT");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
         conn.addBodyPart("user=" + json);
-        conn.connect();
         User updateUser = mapper.readValue(conn.getResponseBody(), User.class);
         conn.disconnect();
         return updateUser;
@@ -492,12 +694,13 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public Status unlockUser(int user_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (user_id <= 0)
+            throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "//users/" + user_id + "/unlock";
-        conn = new MovableTypeApiConnection(url);
+        conn.connectUrl(url);
         conn.setRequestMethod("POST");
-        conn.addRequestProperty("X-MT-Authorization", "MTAuth accessToken=" + token.getAccessToken());
-        conn.connect();
+
         ObjectMapper mapper = new ObjectMapper();
         Status status = mapper.readValue(conn.getResponseBody(), Status.class);
         conn.disconnect();
