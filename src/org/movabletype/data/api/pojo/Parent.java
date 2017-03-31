@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class Parent {
 
     @JsonProperty("id")
-    private Object id;
+    private Integer id;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -27,7 +27,7 @@ public class Parent {
     }
 
     @JsonProperty("id")
-    public void setId(Object id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

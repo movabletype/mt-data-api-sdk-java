@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "status", "createdBy", "updatable", "lockedOut", "isSuperuser", "dateFormat", "systemPermissions", "email", "userpicUrl", "url", "id",
-        "tagDelimiter", "displayName", "modifiedDate", "language", "name", "textFormat", "createdDate", "customFields" })
+        "tagDelimiter", "displayName", "modifiedBy", "modifiedDate", "language", "name", "textFormat", "createdDate", "customFields" })
 public class User {
 
     @JsonProperty("status")
@@ -29,19 +29,21 @@ public class User {
     @JsonProperty("dateFormat")
     private String dateFormat;
     @JsonProperty("systemPermissions")
-    private List<Object> systemPermissions = null;
+    private List<String> systemPermissions = null;
     @JsonProperty("email")
     private String email;
     @JsonProperty("userpicUrl")
-    private Object userpicUrl;
+    private String userpicUrl;
     @JsonProperty("url")
-    private Object url;
+    private String url;
     @JsonProperty("id")
     private String id;
     @JsonProperty("tagDelimiter")
     private String tagDelimiter;
     @JsonProperty("displayName")
     private String displayName;
+    @JsonProperty("modifiedBy")
+    private ModifiedBy modifiedBy;
     @JsonProperty("modifiedDate")
     private String modifiedDate;
     @JsonProperty("language")
@@ -49,7 +51,7 @@ public class User {
     @JsonProperty("name")
     private String name;
     @JsonProperty("textFormat")
-    private Integer textFormat;
+    private String textFormat;
     @JsonProperty("createdDate")
     private String createdDate;
     @JsonProperty("customFields")
@@ -118,12 +120,12 @@ public class User {
     }
 
     @JsonProperty("systemPermissions")
-    public List<Object> getSystemPermissions() {
+    public List<String> getSystemPermissions() {
         return systemPermissions;
     }
 
     @JsonProperty("systemPermissions")
-    public void setSystemPermissions(List<Object> systemPermissions) {
+    public void setSystemPermissions(List<String> systemPermissions) {
         this.systemPermissions = systemPermissions;
     }
 
@@ -143,17 +145,17 @@ public class User {
     }
 
     @JsonProperty("userpicUrl")
-    public void setUserpicUrl(Object userpicUrl) {
+    public void setUserpicUrl(String userpicUrl) {
         this.userpicUrl = userpicUrl;
     }
 
     @JsonProperty("url")
-    public Object getUrl() {
+    public String getUrl() {
         return url;
     }
 
     @JsonProperty("url")
-    public void setUrl(Object url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -187,6 +189,16 @@ public class User {
         this.displayName = displayName;
     }
 
+    @JsonProperty("modifiedBy")
+    public ModifiedBy getModifiedBy() {
+        return modifiedBy;
+    }
+
+    @JsonProperty("modifiedBy")
+    public void setModifiedBy(ModifiedBy modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
     @JsonProperty("modifiedDate")
     public String getModifiedDate() {
         return modifiedDate;
@@ -218,12 +230,12 @@ public class User {
     }
 
     @JsonProperty("textFormat")
-    public Integer getTextFormat() {
+    public String getTextFormat() {
         return textFormat;
     }
 
     @JsonProperty("textFormat")
-    public void setTextFormat(Integer textFormat) {
+    public void setTextFormat(String textFormat) {
         this.textFormat = textFormat;
     }
 

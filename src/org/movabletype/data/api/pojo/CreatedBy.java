@@ -21,7 +21,7 @@ public class CreatedBy {
     @JsonProperty("displayName")
     private String displayName;
     @JsonProperty("userpicUrl")
-    private Object userpicUrl;
+    private String userpicUrl;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -51,7 +51,7 @@ public class CreatedBy {
     }
 
     @JsonProperty("userpicUrl")
-    public void setUserpicUrl(Object userpicUrl) {
+    public void setUserpicUrl(String userpicUrl) {
         this.userpicUrl = userpicUrl;
     }
 
