@@ -68,15 +68,13 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public Version getVersion() throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        Version apiversion = null;
         String url = endpoint + "/" + version + "/version";
-        MovableTypeApiConnection localConn = new MovableTypeApiConnection();
-        localConn.connectUrl(url);
-        localConn.setRequestMethod("GET");
-        localConn.connect();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        conn.connect();
         ObjectMapper mapper = new ObjectMapper();
-        apiversion = mapper.readValue(localConn.getResponseBody(), Version.class);
-        localConn.disconnect();
+        Version apiversion = mapper.readValue(conn.getResponseBody(), Version.class);
+        conn.disconnect();
         return apiversion;
     }
 
@@ -152,6 +150,20 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         authentication = mapper.readValue(conn.getResponseBody(), Authentication.class);
         conn.disconnect();
     }
+    
+    /**
+     * MovableTypeApiClientImpl - Connection not authenticated
+     * 
+     * @param clientId
+     * @param endpoint
+     */
+    public MovableTypeApiClientImpl(String clientId, String endpoint ) {
+        this.endpoint = endpoint;
+        expire = 0L;
+        version = "v3";
+        authentication = null;
+        conn = new MovableTypeApiConnection();
+    }
 
     /**
      * getToken
@@ -163,6 +175,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      */
     private Token getToken() throws KeyManagementException, NoSuchAlgorithmException, IOException {
         Long now = System.currentTimeMillis() / 1000L;
+        if ( authentication == null )
+            return null;
         if (expire > now)
             return token;
         String url = endpoint + "/" + version + "/token";

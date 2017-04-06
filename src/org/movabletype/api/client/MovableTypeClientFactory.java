@@ -33,4 +33,8 @@ public abstract class MovableTypeClientFactory {
         return new MovableTypeApiClientImpl(username, password, clientId, endpoint, authUsername, authPassword);
     }
 
+    public static MovableTypeApiClient createDataApiClient(String clientId, String endpoint)
+            throws JsonParseException, JsonMappingException, KeyManagementException, NoSuchAlgorithmException, IOException {
+        return new MovableTypeApiClientImpl(clientId, endpoint);
+    }
 }
