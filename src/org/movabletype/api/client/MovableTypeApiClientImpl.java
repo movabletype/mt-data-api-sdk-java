@@ -436,7 +436,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         conn.setDoOutput(true);
         conn.setDoInput(true);
         conn.setUseCaches(false);
-        conn.addRequestProperty("Content-Type", "multipart/form-api; boundary=" + boundary);
+        conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
         OutputStream outputStream = conn.getOutputStream();
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, charset), true);
         HashMap<String, Comparable> requestBody = new HashMap<String, Comparable>();
@@ -446,14 +446,14 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         requestBody.put("normalizeOrientation", upload.isNormalizeOrientation());
         for (java.util.Map.Entry<String, Comparable> req : requestBody.entrySet()) {// [9]
             writer.append("--" + boundary).append(CRLF);
-            writer.append("Content-Disposition: form-api; name=\"" + req.getKey() + "\"").append(CRLF);
+            writer.append("Content-Disposition: form-data; name=\"" + req.getKey() + "\"").append(CRLF);
             writer.append(CRLF);
             writer.append(req.getValue().toString()).append(CRLF);
         }
         File uploadFile = new File(upload.getUploadLocalfile());
         String fileName = uploadFile.getName();
         writer.append("--" + boundary).append(CRLF);
-        writer.append("Content-Disposition: form-api; name=\"file\"; filename=\"" + fileName + "\"").append(CRLF);
+        writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"").append(CRLF);
         writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(CRLF);
         writer.append("Content-Transfer-Encoding: binary").append(CRLF);
         writer.append(CRLF);
