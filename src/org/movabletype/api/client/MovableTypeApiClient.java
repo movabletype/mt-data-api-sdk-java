@@ -71,7 +71,7 @@ public interface MovableTypeApiClient {
     /******************************************************
      * Entry
      ******************************************************/
-    Entry postEntry(int i, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+    Entry postEntry(int site_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
     Entry deleteEntry(int site_id, Integer entry_id) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
@@ -116,7 +116,7 @@ public interface MovableTypeApiClient {
 
     UserItems searchUser(UserSearchParam userSearchParam) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
-    User updateUser(int user_id, User user) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+    User updateUser(User user) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
     User getUser(String user_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
