@@ -2,7 +2,6 @@ package org.movabletype.api.client.pojo;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,34 +10,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "message", "code" })
+@JsonPropertyOrder({ "error" })
 public class Error {
 
-    @JsonProperty("message")
-    private String message;
-    @JsonProperty("code")
-    private Integer code;
+    @JsonProperty("error")
+    private ErrorBody error;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("message")
-    public String getMessage() {
-        return message;
+    @JsonProperty("error")
+    public ErrorBody getError() {
+        return error;
     }
 
-    @JsonProperty("message")
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    @JsonProperty("code")
-    public Integer getCode() {
-        return code;
-    }
-
-    @JsonProperty("code")
-    public void setCode(Integer code) {
-        this.code = code;
+    @JsonProperty("error")
+    public void setError(ErrorBody error) {
+        this.error = error;
     }
 
     @JsonAnyGetter

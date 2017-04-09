@@ -21,8 +21,10 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.movabletype.api.client.pojo.Token;
 import org.apache.commons.codec.binary.Base64;
+import org.movabletype.api.client.pojo.Token;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MovableTypeApiConnection {
 
@@ -32,6 +34,10 @@ public class MovableTypeApiConnection {
     private String authUsername;
     private String authPassword;
     private String useragent = "MovableType DataAPI Java Client/v3";
+
+    private int status;
+    private String message;
+    private String body;
 
     /*
      * MovableTypeApiConnection
@@ -117,14 +123,31 @@ public class MovableTypeApiConnection {
      * @throws IOException
      */
     public String getResponseBody() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(urlconn.getInputStream(), "utf8"));
+        BufferedReader reader = null;
+        boolean success = true;
+        try {
+            reader = new BufferedReader(new InputStreamReader(urlconn.getInputStream(), "UTF-8"));
+        } catch ( Exception e ) {
+            reader = new BufferedReader(new InputStreamReader(urlconn.getErrorStream(), "UTF-8"));
+            success = false;
+        }
         String line;
         StringBuilder sb = new StringBuilder();
         while ((line = reader.readLine()) != null) {
             sb.append(line);
         }
         reader.close();
-        return sb.toString();
+        if ( success == true ) {
+            message = "success";
+            status = urlconn.getResponseCode();
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
+            org.movabletype.api.client.pojo.Error error = mapper.readValue(sb.toString(), org.movabletype.api.client.pojo.Error.class);
+            message = error.getError().getMessage();
+            status = error.getError().getCode();
+        }
+        body = sb.toString();
+        return body;
     }
 
     /**
@@ -142,12 +165,39 @@ public class MovableTypeApiConnection {
     /**
      * getUserAgent
      * 
-     * @return
+     * @return UserAgent
      */
     public String getUserAgent() {
         return useragent;
     }
-
+    
+    /**
+     * getStatus
+     * 
+     * @return response status code
+     */
+    public int getStatus() {
+        return status;
+    }
+    
+    /**
+     * getMessage
+     * 
+     * @return response message
+     */
+    public String getMessage() {
+        return message;
+    }
+    
+    /**
+     * getBody
+     * 
+     * @return response body
+     */
+    public String getBody() {
+        return body;
+    }
+    
     public void setRequestMethod(String method) throws ProtocolException {
         urlconn.setRequestMethod(method);
     }
@@ -175,7 +225,7 @@ public class MovableTypeApiConnection {
     public String getResponseMessage() throws IOException {
         return urlconn.getResponseMessage();
     }
-
+    
     public void setDoOutput(boolean dooutput) {
         urlconn.setDoOutput(dooutput);
     }

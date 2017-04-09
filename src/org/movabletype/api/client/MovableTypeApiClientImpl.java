@@ -80,17 +80,17 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @Override
     public int getResponseCode() throws IOException {
-        return conn.getResponseCode();
+        return conn.getStatus();
     }
 
     @Override
     public String getResponseMessage() throws IOException {
-        return conn.getResponseMessage();
+        return conn.getMessage();
     }
 
     @Override
     public String getResponseBody() throws IOException {
-        return conn.getResponseBody();
+        return conn.getBody();
     }
 
     /******************************************************
@@ -143,9 +143,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         version = "v3";
         String url = endpoint + "/" + version + "/authentication?username=" + username + "&password=" + password + "&clientId=" + clientId;
         conn = new MovableTypeApiConnection();
+        conn.setBasicAuthentication(authUsername, authPassword);
         conn.connectUrl(url);
         conn.setRequestMethod("POST");
-        conn.setBasicAuthentication(authUsername, authPassword);
         ObjectMapper mapper = new ObjectMapper();
         authentication = mapper.readValue(conn.getResponseBody(), Authentication.class);
         conn.disconnect();
