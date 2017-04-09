@@ -283,7 +283,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         this.getToken();
         if (fields == null)
             fields = "";
-        String url = endpoint + "/" + version + "/sites/" + site_id + "?" + fields;
+        String url = endpoint + "/" + version + "/sites/" + site_id + "?fields=" + fields;
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -382,7 +382,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         this.getToken();
         if (fields == null)
             fields = "";
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id + "?" + fields;
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id + "?fields=" + fields;
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -515,7 +515,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         this.getToken();
         if (fields == null)
             fields = "";
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id + "?" + fields;
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id + "?fields=" + fields;
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -584,7 +584,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         this.getToken();
         if (fields == null)
             fields = "";
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id + "?" + fields;
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id + "?fields=" + fields;
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -679,7 +679,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         if (user_id == null)
             throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
-        String url = endpoint + "/" + version + "/users/" + user_id + "?" + fields;
+        String url = endpoint + "/" + version + "/users/" + user_id + "?fields=" + fields;
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -689,7 +689,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public User updateUser(int user_id, User user) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public User updateUser(User user) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        int user_id = Integer.valueOf(user.getId());
         if (user_id <= 0)
             throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
