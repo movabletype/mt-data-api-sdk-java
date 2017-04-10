@@ -68,6 +68,8 @@ public interface MovableTypeApiClient {
 
     Site updateSite(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
+    Site updateBlog(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+
     /******************************************************
      * Entry
      ******************************************************/

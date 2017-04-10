@@ -27,7 +27,6 @@ Entry postEntry = client.postEntry(siteId, entry);
 ### Creating a API Client
 ```java
 // Api Authentication
-
 MovableTypeApiClient client
     = MovableTypeClientFactory.createDataApiClient(username,password,clientId,endpoint);
 
@@ -86,6 +85,17 @@ site.setName("WebSite2");
 site = client.updateSite(site_id, site);
 System.out.println(site.getName());
 
+// Update an existing Blog.
+// - Create or search "Site" object.
+int site_id = 4;
+site.setName("WebSite2");
+site = client.updateBlog(site_id, site);
+System.out.println(site.getName());
+
+// Delete an existing site.
+Site site = client.deleteSite(site_id);
+System.out.println(client.getResponseMessage());
+```
 // Delete an existing site.
 Site site = client.deleteSite(site_id);
 System.out.println(client.getResponseMessage());

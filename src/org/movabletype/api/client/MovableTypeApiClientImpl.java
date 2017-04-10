@@ -322,6 +322,24 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         return site;
     }
 
+    @Override
+    public Site updateBlog(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id;
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(site);
+        conn.addBodyPart("blog=" + json);
+        site = mapper.readValue(conn.getResponseBody(), Site.class);
+        conn.disconnect();
+        return site;
+    }
+
     /******************************************************
      * Entry
      ******************************************************/
