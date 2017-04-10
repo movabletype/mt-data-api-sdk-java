@@ -305,7 +305,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site updateSite(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site updateSite(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        int site_id = Integer.valueOf(site.getId());
         if (site_id <= 0)
             throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
@@ -323,7 +324,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site updateBlog(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site updateBlog(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        int site_id = Integer.valueOf(site.getId());
         if (site_id <= 0)
             throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
@@ -422,7 +424,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Entry updateEntry(int site_id, int entry_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Entry updateEntry(int site_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        int entry_id = entry.getId();
         if (site_id <= 0)
             throw new MovableTypeArgumentException("site_id parameter is required");
         if (entry_id <= 0)
@@ -626,7 +629,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Category updateCategory(int site_id, int category_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Category updateCategory(int site_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        int category_id = category.getId();
         if (site_id <= 0)
             throw new MovableTypeArgumentException("site_id parameter is required");
         if (category_id <= 0)

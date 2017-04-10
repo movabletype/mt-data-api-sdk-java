@@ -66,9 +66,9 @@ public interface MovableTypeApiClient {
 
     SiteItems searchSites(SiteSearchParam siteSearchParam) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
-    Site updateSite(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+    Site updateSite(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
-    Site updateBlog(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+    Site updateBlog(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
     /******************************************************
      * Entry
@@ -83,7 +83,7 @@ public interface MovableTypeApiClient {
 
     EntryItems searchEntry(EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
-    Entry updateEntry(int site_id, int entry_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+    Entry updateEntry(int site_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
     /******************************************************
      * Asset
@@ -107,7 +107,7 @@ public interface MovableTypeApiClient {
 
     CategoryItems searchCategory(int site_id, CategorySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
-    Category updateCategory(int site_id, int category_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+    Category updateCategory(int site_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
     /******************************************************
      * User

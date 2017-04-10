@@ -80,16 +80,14 @@ System.out.println(site.getName());
 
 // Update an existing site.
 // - Create or search "Site" object.
-int site_id = 4;
 site.setName("WebSite2");
-site = client.updateSite(site_id, site);
+site = client.updateSite(site);
 System.out.println(site.getName());
 
 // Update an existing Blog.
 // - Create or search "Site" object.
-int site_id = 4;
 site.setName("WebSite2");
-site = client.updateBlog(site_id, site);
+site = client.updateBlog(site);
 System.out.println(site.getName());
 
 // Delete an existing site.
@@ -143,8 +141,9 @@ for (Entry entry : entryItems.getItems()) {
 
 // Update an existing category.
 // - Create or search "Entry" object.
+int site_id = 2;
 entry.setTitle("Update Title");
-entry = client.updateEntry(site_id, entry_id, entry);
+entry = client.updateEntry(site_id, entry);
 System.out.println(entry.getTitle());
 
 // Delete an entry.
@@ -227,7 +226,7 @@ System.out.println(category.getId());
 // - Create or search "Category" object.
 int site_id = 1;
 category.setLabel("News2");
-category = client.updateCategory(site_id, category_id, category);
+category = client.updateCategory(site_id, category);
 System.out.println(category.getLabel());
 
 // Delete an existing category.
