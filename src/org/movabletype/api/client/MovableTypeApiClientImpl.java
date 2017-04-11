@@ -412,9 +412,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public EntryItems searchEntry(EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public EntryItems searchEntry(int site_id, EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
         this.getToken();
-        String url = endpoint + "/" + version + "/search?" + search.getQueryString();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries?" + search.getQueryString();
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();

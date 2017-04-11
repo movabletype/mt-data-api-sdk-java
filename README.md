@@ -113,10 +113,11 @@ System.out.println(entry.getId());
 System.out.println(entry.getCreatedDate());
 
 // Searching the entries.
+int site_id = 2;
 EntrySearchParam entrySearchParam = new EntrySearchParam();
 entrySearchParam.setBlog_id(2);
 entrySearchParam.setSearch("Title");
-EntryItems entryItems = client.searchEntry(entrySearchParam);
+EntryItems entryItems = client.searchEntry(site_id, entrySearchParam);
 for (Entry entry : entryItems.getItems()) {
     System.out.println(entry.getId());
     System.out.println(entry.getTitle());
