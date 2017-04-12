@@ -156,13 +156,17 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * 
      * @param clientId
      * @param endpoint
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
      */
-    public MovableTypeApiClientImpl(String clientId, String endpoint ) {
+    public MovableTypeApiClientImpl(String clientId, String endpoint ) throws KeyManagementException, NoSuchAlgorithmException, IOException {
         this.endpoint = endpoint;
         expire = 0L;
         version = "v3";
         authentication = null;
         conn = new MovableTypeApiConnection();
+        this.getVersion();  // connection check.
     }
 
     /**
@@ -380,20 +384,6 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public EntryItems getEntries(int site_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        this.getToken();
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries";
-        conn.connectUrl(url);
-        conn.setRequestMethod("GET");
-        ObjectMapper mapper = new ObjectMapper();
-        EntryItems entries = mapper.readValue(conn.getResponseBody(), EntryItems.class);
-        conn.disconnect();
-        return entries;
-    }
-
-    @Override
     public Entry getEntry(int site_id, int entry_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
         if (site_id <= 0)
             throw new MovableTypeArgumentException("site_id parameter is required");
@@ -412,7 +402,10 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public EntryItems searchEntry(int site_id, EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public EntryItems searchEntry(EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        int  site_id = search.getSite_id();
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries?" + search.getQueryString();
         conn.connectUrl(url);

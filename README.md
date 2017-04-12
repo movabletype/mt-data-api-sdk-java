@@ -113,11 +113,11 @@ System.out.println(entry.getId());
 System.out.println(entry.getCreatedDate());
 
 // Searching the entries.
-int site_id = 2;
 EntrySearchParam entrySearchParam = new EntrySearchParam();
-entrySearchParam.setBlog_id(2);
+entrySearchParam.setSite_id(2);
+entrySearchParam.setLimit(2);
 entrySearchParam.setSearch("Title");
-EntryItems entryItems = client.searchEntry(site_id, entrySearchParam);
+EntryItems entryItems = client.searchEntry(entrySearchParam);
 for (Entry entry : entryItems.getItems()) {
     System.out.println(entry.getId());
     System.out.println(entry.getTitle());
@@ -131,14 +131,6 @@ Entry entry = client.getEntry(site_id, entry_id, fields);
 System.out.println(entry.getId());
 System.out.println(entry.getTitle());
 System.out.println(entry.getBody());
-
-// Retrieve list of entry in the specified site.
-int site_id = 2;
-EntryItems entryItems = client.getEntries(site_id);
-for (Entry entry : entryItems.getItems()) {
-    System.out.println(entry.getId());
-    System.out.println(entry.getTitle());
-}
 
 // Update an existing category.
 // - Create or search "Entry" object.
