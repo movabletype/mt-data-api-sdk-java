@@ -552,6 +552,27 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         return assets;
     }
 
+    @Override
+    public Asset updateAsset(int site_id, Asset asset) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        if (site_id <= 0)
+            throw new MovableTypeArgumentException("site_id parameter is required");
+        int asset_id = asset.getId();
+        if (asset_id <= 0)
+            throw new MovableTypeArgumentException("Asset.asset_id parameter is required");
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id;
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(asset);
+        conn.addBodyPart("asset=" + json);
+        asset = mapper.readValue(conn.getResponseBody(), Asset.class);
+        conn.disconnect();
+        return asset;
+    }
+
     /******************************************************
      * Category
      ******************************************************/

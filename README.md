@@ -54,7 +54,7 @@ System.out.println(site.getHost());
 // Create a new blog under the site.
 int site_id = 4;
 Site site = new Site();
-site.setName("My Blog");
+site.setName("Blog");
 site.setUrl("http://example.com/blog/");
 site.setSitePath("/data/file/static/example.com/blog");
 site = client.createBlog( site_id, site) ;
@@ -79,14 +79,12 @@ System.out.println(site.getId());
 System.out.println(site.getName());
 
 // Update an existing site.
-// - Create or search "Site" object.
-site.setName("WebSite2");
+site.setName("Update WebSite");
 site = client.updateSite(site);
 System.out.println(site.getName());
 
 // Update an existing Blog.
-// - Create or search "Site" object.
-site.setName("WebSite2");
+site.setName("Update Blog");
 site = client.updateBlog(site);
 System.out.println(site.getName());
 
@@ -133,7 +131,6 @@ System.out.println(entry.getTitle());
 System.out.println(entry.getBody());
 
 // Update an existing category.
-// - Create or search "Entry" object.
 int site_id = 2;
 entry.setTitle("Update Title");
 entry = client.updateEntry(site_id, entry);
@@ -177,6 +174,13 @@ Asset asset = client.getAsset(site_id, asset_id, fields);
 System.out.println(asset.getLabel());
 System.out.println(asset.getUrl());
 
+// Update an asset.
+asset.setDescription("description-update.jpg");
+asset.setLabel("label-update..jpg");
+asset = client.updateAsset(site_id, asset);
+System.out.println(asset.getLabel());
+System.out.println(asset.getDescription());
+
 // Delete an asset.
 int site_id = 1;
 int asset_id = 10;
@@ -216,7 +220,6 @@ System.out.println(category.getBasename());
 System.out.println(category.getId());
 
 // Update an existing category.
-// - Create or search "Category" object.
 int site_id = 1;
 category.setLabel("News2");
 category = client.updateCategory(site_id, category);
@@ -259,7 +262,6 @@ System.out.println(user.getName());
 System.out.println(user.getDisplayName());
 
 // Update an existing user.
-// - Create or search "User" object.
 user.setDisplayName("melody2");
 user = client.updateUser(user);
 System.out.println(user.getDisplayName());
@@ -272,6 +274,18 @@ System.out.println(status.getStatus());
 // Delete an existing user.
 User user = client.deleteUser(2);
 System.out.println(client.getResponseMessage());
+```
+
+### Session
+
+```java
+// Sign out.
+Status status =  client.signOut();
+System.out.println(status.getStatus());
+
+// Remove token.
+Status status = client.deleteToken();
+System.out.println(status.getStatus());
 ```
 
 ### API Response

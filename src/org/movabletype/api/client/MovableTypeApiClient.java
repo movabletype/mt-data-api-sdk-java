@@ -94,6 +94,8 @@ public interface MovableTypeApiClient {
 
     AssetItems searchAsset(int site_id, AssetSearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException;
 
+    Asset updateAsset(int site_id, Asset asset) throws KeyManagementException, NoSuchAlgorithmException, IOException;
+
     /******************************************************
      * Category
      ******************************************************/
