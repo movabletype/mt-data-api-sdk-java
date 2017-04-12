@@ -92,10 +92,6 @@ System.out.println(site.getName());
 Site site = client.deleteSite(site_id);
 System.out.println(client.getResponseMessage());
 ```
-// Delete an existing site.
-Site site = client.deleteSite(site_id);
-System.out.println(client.getResponseMessage());
-```
 
 ### Entry
 
