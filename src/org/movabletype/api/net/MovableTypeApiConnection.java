@@ -51,10 +51,8 @@ public class MovableTypeApiConnection {
      * 
      * @param url
      * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
      */
-    public void connectUrl(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+    public void connectUrl(String url) throws IOException {
         URL connectURL = new URL(url);
         if ("https".equals(connectURL.getProtocol())) {
             // Certificate information return all empty
@@ -71,8 +69,15 @@ public class MovableTypeApiConnection {
                 public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                 }
             } };
-            SSLContext sslcontext = SSLContext.getInstance("SSL");
-            sslcontext.init(null, tm, null);
+            SSLContext sslcontext;
+            try {
+                sslcontext = SSLContext.getInstance("SSL");
+                sslcontext.init(null, tm, null);
+            } catch (NoSuchAlgorithmException e) {
+                throw new IOException(e.getMessage());
+            } catch (KeyManagementException e) {
+                throw new IOException(e.getMessage());
+            }
             // Host name verification rule Return true if anything comes in
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override

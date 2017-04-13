@@ -7,11 +7,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URLConnection;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
-import org.movabletype.api.exception.MovableTypeArgumentException;
 import org.movabletype.api.net.MovableTypeApiConnection;
 import org.movabletype.api.client.pojo.Asset;
 import org.movabletype.api.client.pojo.AssetItems;
@@ -35,8 +32,6 @@ import org.movabletype.api.client.request.SiteSearchParam;
 import org.movabletype.api.client.request.UploadParam;
 import org.movabletype.api.client.request.UserSearchParam;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MovableTypeApiClientImpl implements MovableTypeApiClient {
@@ -67,7 +62,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Version getVersion() throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Version getVersion() throws IOException {
         String url = endpoint + "/" + version + "/version";
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
@@ -103,14 +98,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * @param password
      * @param clientId
      * @param endpoint
-     * @throws JsonParseException
-     * @throws JsonMappingException
      * @throws IOException
-     * @throws KeyManagementException
-     * @throws NoSuchAlgorithmException
      */
-    public MovableTypeApiClientImpl(String username, String password, String clientId, String endpoint) throws JsonParseException, JsonMappingException,
-            IOException, KeyManagementException, NoSuchAlgorithmException {
+    public MovableTypeApiClientImpl(String username, String password, String clientId, String endpoint) throws IOException {
         this.endpoint = endpoint;
         expire = 0L;
         version = "v3";
@@ -132,12 +122,10 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * @param endpoint
      * @param authUsername
      * @param authPassword
-     * @throws KeyManagementException
-     * @throws NoSuchAlgorithmException
      * @throws IOException
      */
     public MovableTypeApiClientImpl(String username, String password, String clientId, String endpoint, String authUsername, String authPassword)
-            throws KeyManagementException, NoSuchAlgorithmException, IOException {
+            throws IOException {
         this.endpoint = endpoint;
         expire = 0L;
         version = "v3";
@@ -156,11 +144,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * 
      * @param clientId
      * @param endpoint
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
      * @throws IOException
      */
-    public MovableTypeApiClientImpl(String clientId, String endpoint ) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public MovableTypeApiClientImpl(String clientId, String endpoint ) throws IOException {
         this.endpoint = endpoint;
         expire = 0L;
         version = "v3";
@@ -173,11 +159,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * getToken
      * 
      * @return
-     * @throws KeyManagementException
-     * @throws NoSuchAlgorithmException
      * @throws IOException
      */
-    private Token getToken() throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    private Token getToken() throws IOException {
         Long now = System.currentTimeMillis() / 1000L;
         if ( authentication == null )
             return null;
@@ -201,7 +185,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Status deleteToken() throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Status deleteToken() throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/token";
         conn.connectUrl(url);
@@ -214,7 +198,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Status signOut() throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Status signOut() throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/authentication";
         conn.connectUrl(url);
@@ -231,7 +215,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * @throws IOException
      ******************************************************/
     @Override
-    public Site createWebsite(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site createWebsite(Site site) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites";
         conn.connectUrl(url);
@@ -247,15 +231,12 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site createBlog(int site_id, Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public Site createBlog(int site_id, Site site) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id;
         conn.connectUrl(url);
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
-
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(site);
@@ -267,9 +248,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site deleteSite(int site_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public Site deleteSite(int site_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id;
         conn.connectUrl(url);
@@ -281,9 +260,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site getSite(int site_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public Site getSite(int site_id, String fields) throws IOException {
         this.getToken();
         if (fields == null)
             fields = "";
@@ -297,7 +274,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public SiteItems searchSites(SiteSearchParam siteSearchParam) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public SiteItems searchSites(SiteSearchParam siteSearchParam) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites?" + siteSearchParam.getQueryString();
         conn.connectUrl(url);
@@ -309,10 +286,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site updateSite(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site updateSite(Site site) throws IOException {
         int site_id = Integer.valueOf(site.getId());
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id;
         conn.connectUrl(url);
@@ -328,10 +303,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Site updateBlog(Site site) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Site updateBlog(Site site) throws IOException {
         int site_id = Integer.valueOf(site.getId());
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id;
         conn.connectUrl(url);
@@ -350,9 +323,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      * Entry
      ******************************************************/
     @Override
-    public Entry postEntry(int site_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public Entry postEntry(int site_id, Entry entry) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries";
         conn.connectUrl(url);
@@ -368,11 +339,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Entry deleteEntry(int site_id, Integer entry_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (entry_id <= 0)
-            throw new MovableTypeArgumentException("entry_id parameter is required");
+    public Entry deleteEntry(int site_id, Integer entry_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id;
         conn.connectUrl(url);
@@ -384,11 +351,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Entry getEntry(int site_id, int entry_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (entry_id <= 0)
-            throw new MovableTypeArgumentException("entry_id parameter is required");
+    public Entry getEntry(int site_id, int entry_id, String fields) throws IOException {
         this.getToken();
         if (fields == null)
             fields = "";
@@ -402,10 +365,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public EntryItems searchEntry(EntrySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public EntryItems searchEntry(EntrySearchParam search) throws IOException {
         int  site_id = search.getSite_id();
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries?" + search.getQueryString();
         conn.connectUrl(url);
@@ -417,12 +378,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Entry updateEntry(int site_id, Entry entry) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Entry updateEntry(int site_id, Entry entry) throws IOException {
         int entry_id = entry.getId();
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (entry_id <= 0)
-            throw new MovableTypeArgumentException("entry_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id;
         conn.connectUrl(url);
@@ -443,13 +400,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Asset uploadAsset(UploadParam upload) throws IOException, KeyManagementException, NoSuchAlgorithmException {
-        if (upload.getSite_id() <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (upload.getUploadPath() == null)
-            throw new MovableTypeArgumentException("uploadPath parameter is required");
-        if (upload.getUploadLocalfile() == null)
-            throw new MovableTypeArgumentException("uploadLocalfile parameter is required");
+    public Asset uploadAsset(UploadParam upload) throws IOException {
         this.getToken();
         String overwrite = "";
         if (upload.isOverwrite_once() == true)
@@ -505,11 +456,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Asset deleteAsset(int site_id, int asset_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (asset_id <= 0)
-            throw new MovableTypeArgumentException("asset_id parameter is required");
+    public Asset deleteAsset(int site_id, int asset_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id;
         conn.connectUrl(url);
@@ -521,11 +468,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Asset getAsset(int site_id, int asset_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (asset_id <= 0)
-            throw new MovableTypeArgumentException("asset_id parameter is required");
+    public Asset getAsset(int site_id, int asset_id, String fields) throws IOException {
         this.getToken();
         if (fields == null)
             fields = "";
@@ -539,9 +482,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public AssetItems searchAsset(int site_id, AssetSearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public AssetItems searchAsset(int site_id, AssetSearchParam search) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/assets?" + search.getQueryString();
         conn.connectUrl(url);
@@ -553,12 +494,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Asset updateAsset(int site_id, Asset asset) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public Asset updateAsset(int site_id, Asset asset) throws IOException {
         int asset_id = asset.getId();
-        if (asset_id <= 0)
-            throw new MovableTypeArgumentException("Asset.asset_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id;
         conn.connectUrl(url);
@@ -578,9 +515,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      ******************************************************/
 
     @Override
-    public Category createCategory(int site_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public Category createCategory(int site_id, Category category) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/categories";
         conn.connectUrl(url);
@@ -595,11 +530,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Category deleteCategory(int site_id, int category_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (category_id <= 0)
-            throw new MovableTypeArgumentException("category_id parameter is required");
+    public Category deleteCategory(int site_id, int category_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id;
         conn.connectUrl(url);
@@ -611,11 +542,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Category getCategory(int site_id, int category_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (category_id <= 0)
-            throw new MovableTypeArgumentException("category_id parameter is required");
+    public Category getCategory(int site_id, int category_id, String fields) throws IOException {
         this.getToken();
         if (fields == null)
             fields = "";
@@ -629,9 +556,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public CategoryItems searchCategory(int site_id, CategorySearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
+    public CategoryItems searchCategory(int site_id, CategorySearchParam search) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/categories?" + search.getQueryString();
         conn.connectUrl(url);
@@ -643,12 +568,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Category updateCategory(int site_id, Category category) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public Category updateCategory(int site_id, Category category) throws IOException {
         int category_id = category.getId();
-        if (site_id <= 0)
-            throw new MovableTypeArgumentException("site_id parameter is required");
-        if (category_id <= 0)
-            throw new MovableTypeArgumentException("category_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id;
         conn.connectUrl(url);
@@ -668,7 +589,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      ******************************************************/
 
     @Override
-    public User createUser(CreateUser createUser) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public User createUser(CreateUser createUser) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/users";
         conn.connectUrl(url);
@@ -684,9 +605,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public User deleteUser(int user_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (user_id <= 0)
-            throw new MovableTypeArgumentException("user_id parameter is required");
+    public User deleteUser(int user_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/users/" + user_id;
         conn.connectUrl(url);
@@ -698,7 +617,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public UserItems searchUser(UserSearchParam search) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public UserItems searchUser(UserSearchParam search) throws IOException {
         this.getToken();
         UserItems userItems = null;
         String url = endpoint + "/" + version + "/users?" + search.getQueryString();
@@ -711,9 +630,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public User getUser(String user_id, String fields) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (user_id == null)
-            throw new MovableTypeArgumentException("user_id parameter is required");
+    public User getUser(String user_id, String fields) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/users/" + user_id + "?fields=" + fields;
         conn.connectUrl(url);
@@ -725,10 +642,8 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public User updateUser(User user) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+    public User updateUser(User user) throws IOException {
         int user_id = Integer.valueOf(user.getId());
-        if (user_id <= 0)
-            throw new MovableTypeArgumentException("user_id parameter is required");
         this.getToken();
         String url = endpoint + "/" + version + "/users/" + user_id;
         conn.connectUrl(url);
@@ -744,14 +659,11 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Status unlockUser(int user_id) throws KeyManagementException, NoSuchAlgorithmException, IOException {
-        if (user_id <= 0)
-            throw new MovableTypeArgumentException("user_id parameter is required");
+    public Status unlockUser(int user_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "//users/" + user_id + "/unlock";
         conn.connectUrl(url);
         conn.setRequestMethod("POST");
-
         ObjectMapper mapper = new ObjectMapper();
         Status status = mapper.readValue(conn.getResponseBody(), Status.class);
         conn.disconnect();
