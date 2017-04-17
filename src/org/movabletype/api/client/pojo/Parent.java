@@ -22,7 +22,7 @@ public class Parent {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("id")
-    public Object getId() {
+    public Integer getId() {
         return id;
     }
 

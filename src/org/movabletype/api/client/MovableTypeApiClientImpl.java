@@ -15,7 +15,6 @@ import org.movabletype.api.client.pojo.AssetItems;
 import org.movabletype.api.client.pojo.Authentication;
 import org.movabletype.api.client.pojo.Category;
 import org.movabletype.api.client.pojo.CategoryItems;
-import org.movabletype.api.client.pojo.CreateUser;
 import org.movabletype.api.client.pojo.Entry;
 import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.Site;
@@ -589,7 +588,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
      ******************************************************/
 
     @Override
-    public User createUser(CreateUser createUser) throws IOException {
+    public User createUser(User user) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/users";
         conn.connectUrl(url);
@@ -597,9 +596,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         conn.setRequestMethod("POST");
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(createUser);
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
         conn.addBodyPart("user=" + json);
-        User user = mapper.readValue(conn.getResponseBody(), User.class);
+        user = mapper.readValue(conn.getResponseBody(), User.class);
         conn.disconnect();
         return user;
     }

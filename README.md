@@ -232,7 +232,7 @@ System.out.println(client.getResponseMessage());
 
 ```java
 // Create a new user.
-CreateUser createUser = new CreateUser();
+User createUser = new User();
 createUser.setName("melody");
 createUser.setPassword("nelsonnelson");
 createUser.setDisplayName("Melody");

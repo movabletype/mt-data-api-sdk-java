@@ -13,9 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userpicUrl", "displayName" })
+@JsonPropertyOrder({ "id", "userpicUrl", "displayName" })
 public class Author {
 
+    @JsonProperty("id")
+    private Integer id;
     @JsonProperty("userpicUrl")
     private String userpicUrl;
     @JsonProperty("displayName")
@@ -23,8 +25,18 @@ public class Author {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    @JsonProperty("id")
+    public Integer getId() {
+        return id;
+    }
+
+    @JsonProperty("id")
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
     @JsonProperty("userpicUrl")
-    public Object getUserpicUrl() {
+    public String getUserpicUrl() {
         return userpicUrl;
     }
 

@@ -21,11 +21,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "moderateComments", "allowCommentsDefault", "includeCache", "allowCommenterRegist", "allowToChangeAtUpload", "uploadDestination", "maxRevisionsEntry",
         "updatable", "requireCommentEmails", "ccLicenseImage", "allowComments", "allowPingsDefault", "pingOthers", "basenameLimit", "dynamicCache",
         "modifiedDate", "allowPings", "pageCustomPrefs", "dynamicConditional", "commenterAuthenticators", "host", "ccLicenseUrl", "newCreatedUserRoles",
-        "wordsInExcerpt", "sortOrderComments", "followAuthLinks", "allowUnregComments", "maxRevisionsTemplate", "moderatePings", "customDynamicTemplates" })
+        "wordsInExcerpt", "sortOrderComments", "followAuthLinks", "allowUnregComments", "maxRevisionsTemplate", "moderatePings", "customDynamicTemplates" ,
+        "siteSubdomain", "useCommentComfirmation" })
 public class Site {
 
     @JsonProperty("serverOffset")
-    private String serverOffset;
+    private Integer serverOffset;
     @JsonProperty("themeId")
     private String themeId;
     @JsonProperty("statusDefault")
@@ -49,7 +50,7 @@ public class Site {
     @JsonProperty("modifiedBy")
     private ModifiedBy modifiedBy;
     @JsonProperty("operationIfExists")
-    private String operationIfExists;
+    private Integer operationIfExists;
     @JsonProperty("timezone")
     private String timezone;
     @JsonProperty("daysOrPosts")
@@ -75,13 +76,13 @@ public class Site {
     @JsonProperty("smartReplace")
     private Integer smartReplace;
     @JsonProperty("junkFolderExpiry")
-    private String junkFolderExpiry;
+    private Integer junkFolderExpiry;
     @JsonProperty("publishEmptyArchive")
     private Boolean publishEmptyArchive;
     @JsonProperty("dateLanguage")
     private String dateLanguage;
     @JsonProperty("listOnIndex")
-    private String listOnIndex;
+    private Integer listOnIndex;
     @JsonProperty("pingWeblogs")
     private Boolean pingWeblogs;
     @JsonProperty("extraPath")
@@ -89,7 +90,7 @@ public class Site {
     @JsonProperty("normalizeOrientation")
     private Boolean normalizeOrientation;
     @JsonProperty("emailNewComments")
-    private String emailNewComments;
+    private Integer emailNewComments;
     @JsonProperty("language")
     private String language;
     @JsonProperty("autolinkUrls")
@@ -97,9 +98,9 @@ public class Site {
     @JsonProperty("sanitizeSpec")
     private String sanitizeSpec;
     @JsonProperty("customFields")
-    private List<Object> customFields = null;
+    private List<CustomField> customFields = null;
     @JsonProperty("emailNewPings")
-    private String emailNewPings;
+    private Integer emailNewPings;
     @JsonProperty("nofollowUrls")
     private Boolean nofollowUrls;
     @JsonProperty("createdBy")
@@ -111,15 +112,15 @@ public class Site {
     @JsonProperty("sitePath")
     private String sitePath;
     @JsonProperty("id")
-    private String id;
+    private Integer id;
     @JsonProperty("parent")
-    private Object parent;
+    private Parent parent;
     @JsonProperty("archiveTypePreferred")
     private String archiveTypePreferred;
     @JsonProperty("contentCss")
     private String contentCss;
     @JsonProperty("junkScoreThreshold")
-    private String junkScoreThreshold;
+    private Integer junkScoreThreshold;
     @JsonProperty("internalAutodiscovery")
     private Boolean internalAutodiscovery;
     @JsonProperty("createdDate")
@@ -127,7 +128,7 @@ public class Site {
     @JsonProperty("class")
     private String _class;
     @JsonProperty("moderateComments")
-    private String moderateComments;
+    private Integer moderateComments;
     @JsonProperty("allowCommentsDefault")
     private Boolean allowCommentsDefault;
     @JsonProperty("includeCache")
@@ -139,7 +140,7 @@ public class Site {
     @JsonProperty("uploadDestination")
     private UploadDestination uploadDestination;
     @JsonProperty("maxRevisionsEntry")
-    private String maxRevisionsEntry;
+    private Integer maxRevisionsEntry;
     @JsonProperty("updatable")
     private Boolean updatable;
     @JsonProperty("requireCommentEmails")
@@ -151,9 +152,9 @@ public class Site {
     @JsonProperty("allowPingsDefault")
     private Boolean allowPingsDefault;
     @JsonProperty("pingOthers")
-    private List<Object> pingOthers = null;
+    private List<String> pingOthers = null;
     @JsonProperty("basenameLimit")
-    private String basenameLimit;
+    private Integer basenameLimit;
     @JsonProperty("dynamicCache")
     private Boolean dynamicCache;
     @JsonProperty("modifiedDate")
@@ -171,9 +172,9 @@ public class Site {
     @JsonProperty("ccLicenseUrl")
     private String ccLicenseUrl;
     @JsonProperty("newCreatedUserRoles")
-    private List<Object> newCreatedUserRoles = null;
+    private List<Role> newCreatedUserRoles = null;
     @JsonProperty("wordsInExcerpt")
-    private String wordsInExcerpt;
+    private Integer wordsInExcerpt;
     @JsonProperty("sortOrderComments")
     private String sortOrderComments;
     @JsonProperty("followAuthLinks")
@@ -181,21 +182,26 @@ public class Site {
     @JsonProperty("allowUnregComments")
     private Boolean allowUnregComments;
     @JsonProperty("maxRevisionsTemplate")
-    private String maxRevisionsTemplate;
+    private Integer maxRevisionsTemplate;
     @JsonProperty("moderatePings")
     private Boolean moderatePings;
     @JsonProperty("customDynamicTemplates")
     private String customDynamicTemplates;
+    @JsonProperty("siteSubdomain")
+    private String siteSubdomain;
+    @JsonProperty("useCommentComfirmation")
+    private Boolean useCommentComfirmation;
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("serverOffset")
-    public String getServerOffset() {
+    public Integer getServerOffset() {
         return serverOffset;
     }
 
     @JsonProperty("serverOffset")
-    public void setServerOffset(String serverOffset) {
+    public void setServerOffset(Integer serverOffset) {
         this.serverOffset = serverOffset;
     }
 
@@ -310,12 +316,12 @@ public class Site {
     }
 
     @JsonProperty("operationIfExists")
-    public String getOperationIfExists() {
+    public Integer getOperationIfExists() {
         return operationIfExists;
     }
 
     @JsonProperty("operationIfExists")
-    public void setOperationIfExists(String operationIfExists) {
+    public void setOperationIfExists(Integer operationIfExists) {
         this.operationIfExists = operationIfExists;
     }
 
@@ -440,12 +446,12 @@ public class Site {
     }
 
     @JsonProperty("junkFolderExpiry")
-    public String getJunkFolderExpiry() {
+    public Integer getJunkFolderExpiry() {
         return junkFolderExpiry;
     }
 
     @JsonProperty("junkFolderExpiry")
-    public void setJunkFolderExpiry(String junkFolderExpiry) {
+    public void setJunkFolderExpiry(Integer junkFolderExpiry) {
         this.junkFolderExpiry = junkFolderExpiry;
     }
 
@@ -470,12 +476,12 @@ public class Site {
     }
 
     @JsonProperty("listOnIndex")
-    public String getListOnIndex() {
+    public Integer getListOnIndex() {
         return listOnIndex;
     }
 
     @JsonProperty("listOnIndex")
-    public void setListOnIndex(String listOnIndex) {
+    public void setListOnIndex(Integer listOnIndex) {
         this.listOnIndex = listOnIndex;
     }
 
@@ -510,12 +516,12 @@ public class Site {
     }
 
     @JsonProperty("emailNewComments")
-    public String getEmailNewComments() {
+    public Integer getEmailNewComments() {
         return emailNewComments;
     }
 
     @JsonProperty("emailNewComments")
-    public void setEmailNewComments(String emailNewComments) {
+    public void setEmailNewComments(Integer emailNewComments) {
         this.emailNewComments = emailNewComments;
     }
 
@@ -550,22 +556,22 @@ public class Site {
     }
 
     @JsonProperty("customFields")
-    public List<Object> getCustomFields() {
+    public List<CustomField> getCustomFields() {
         return customFields;
     }
 
     @JsonProperty("customFields")
-    public void setCustomFields(List<Object> customFields) {
+    public void setCustomFields(List<CustomField> customFields) {
         this.customFields = customFields;
     }
 
     @JsonProperty("emailNewPings")
-    public String getEmailNewPings() {
+    public Integer getEmailNewPings() {
         return emailNewPings;
     }
 
     @JsonProperty("emailNewPings")
-    public void setEmailNewPings(String emailNewPings) {
+    public void setEmailNewPings(Integer emailNewPings) {
         this.emailNewPings = emailNewPings;
     }
 
@@ -620,22 +626,22 @@ public class Site {
     }
 
     @JsonProperty("id")
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @JsonProperty("parent")
-    public Object getParent() {
+    public Parent getParent() {
         return parent;
     }
 
     @JsonProperty("parent")
-    public void setParent(Object parent) {
+    public void setParent(Parent parent) {
         this.parent = parent;
     }
 
@@ -660,12 +666,12 @@ public class Site {
     }
 
     @JsonProperty("junkScoreThreshold")
-    public String getJunkScoreThreshold() {
+    public Integer getJunkScoreThreshold() {
         return junkScoreThreshold;
     }
 
     @JsonProperty("junkScoreThreshold")
-    public void setJunkScoreThreshold(String junkScoreThreshold) {
+    public void setJunkScoreThreshold(Integer junkScoreThreshold) {
         this.junkScoreThreshold = junkScoreThreshold;
     }
 
@@ -700,12 +706,12 @@ public class Site {
     }
 
     @JsonProperty("moderateComments")
-    public String getModerateComments() {
+    public Integer getModerateComments() {
         return moderateComments;
     }
 
     @JsonProperty("moderateComments")
-    public void setModerateComments(String moderateComments) {
+    public void setModerateComments(Integer moderateComments) {
         this.moderateComments = moderateComments;
     }
 
@@ -760,12 +766,12 @@ public class Site {
     }
 
     @JsonProperty("maxRevisionsEntry")
-    public String getMaxRevisionsEntry() {
+    public Integer getMaxRevisionsEntry() {
         return maxRevisionsEntry;
     }
 
     @JsonProperty("maxRevisionsEntry")
-    public void setMaxRevisionsEntry(String maxRevisionsEntry) {
+    public void setMaxRevisionsEntry(Integer maxRevisionsEntry) {
         this.maxRevisionsEntry = maxRevisionsEntry;
     }
 
@@ -820,22 +826,22 @@ public class Site {
     }
 
     @JsonProperty("pingOthers")
-    public List<Object> getPingOthers() {
+    public List<String> getPingOthers() {
         return pingOthers;
     }
 
     @JsonProperty("pingOthers")
-    public void setPingOthers(List<Object> pingOthers) {
+    public void setPingOthers(List<String> pingOthers) {
         this.pingOthers = pingOthers;
     }
 
     @JsonProperty("basenameLimit")
-    public String getBasenameLimit() {
+    public Integer getBasenameLimit() {
         return basenameLimit;
     }
 
     @JsonProperty("basenameLimit")
-    public void setBasenameLimit(String basenameLimit) {
+    public void setBasenameLimit(Integer basenameLimit) {
         this.basenameLimit = basenameLimit;
     }
 
@@ -920,22 +926,22 @@ public class Site {
     }
 
     @JsonProperty("newCreatedUserRoles")
-    public List<Object> getNewCreatedUserRoles() {
+    public List<Role> getNewCreatedUserRoles() {
         return newCreatedUserRoles;
     }
 
     @JsonProperty("newCreatedUserRoles")
-    public void setNewCreatedUserRoles(List<Object> newCreatedUserRoles) {
+    public void setNewCreatedUserRoles(List<Role> newCreatedUserRoles) {
         this.newCreatedUserRoles = newCreatedUserRoles;
     }
 
     @JsonProperty("wordsInExcerpt")
-    public String getWordsInExcerpt() {
+    public Integer getWordsInExcerpt() {
         return wordsInExcerpt;
     }
 
     @JsonProperty("wordsInExcerpt")
-    public void setWordsInExcerpt(String wordsInExcerpt) {
+    public void setWordsInExcerpt(Integer wordsInExcerpt) {
         this.wordsInExcerpt = wordsInExcerpt;
     }
 
@@ -970,12 +976,12 @@ public class Site {
     }
 
     @JsonProperty("maxRevisionsTemplate")
-    public String getMaxRevisionsTemplate() {
+    public Integer getMaxRevisionsTemplate() {
         return maxRevisionsTemplate;
     }
 
     @JsonProperty("maxRevisionsTemplate")
-    public void setMaxRevisionsTemplate(String maxRevisionsTemplate) {
+    public void setMaxRevisionsTemplate(Integer maxRevisionsTemplate) {
         this.maxRevisionsTemplate = maxRevisionsTemplate;
     }
 
@@ -997,6 +1003,26 @@ public class Site {
     @JsonProperty("customDynamicTemplates")
     public void setCustomDynamicTemplates(String customDynamicTemplates) {
         this.customDynamicTemplates = customDynamicTemplates;
+    }
+    
+    @JsonProperty("siteSubdomain")
+    public String getSiteSubdomain() {
+        return siteSubdomain;
+    }
+
+    @JsonProperty("siteSubdomain")
+    public void setSiteSubdomain(String siteSubdomain) {
+        this.siteSubdomain = siteSubdomain;
+    }
+    
+    @JsonProperty("useCommentComfirmation")
+    public Boolean getUseCommentComfirmation() {
+        return useCommentComfirmation;
+    }
+
+    @JsonProperty("useCommentComfirmation")
+    public void setUseCommentComfirmation(Boolean useCommentComfirmation) {
+        this.useCommentComfirmation = useCommentComfirmation;
     }
 
     @JsonAnyGetter

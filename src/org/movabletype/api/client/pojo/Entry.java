@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "excerpt", "status", "date", "updatable", "author", "allowComments", "comments", "permalink", "body", "keywords", "allowTrackbacks", "id",
         "trackbacks", "modifiedDate", "trackbackCount", "categories", "blog", "commentCount", "tags", "basename", "assets", "pingsSentUrl", "title", "class",
-        "createdDate", "more", "customFields" })
+        "createdDate", "more", "format", "unpublishedDate", "customFields" })
 public class Entry {
 
     @JsonProperty("excerpt")
@@ -32,7 +32,7 @@ public class Entry {
     @JsonProperty("allowComments")
     private Boolean allowComments;
     @JsonProperty("comments")
-    private List<Object> comments = null;
+    private List<Comment> comments = null;
     @JsonProperty("permalink")
     private String permalink;
     @JsonProperty("body")
@@ -44,25 +44,25 @@ public class Entry {
     @JsonProperty("id")
     private Integer id;
     @JsonProperty("trackbacks")
-    private List<Object> trackbacks = null;
+    private List<Trackback> trackbacks = null;
     @JsonProperty("modifiedDate")
     private String modifiedDate;
     @JsonProperty("trackbackCount")
     private String trackbackCount;
     @JsonProperty("categories")
-    private List<Object> categories = null;
+    private List<Category> categories = null;
     @JsonProperty("blog")
     private Blog blog;
     @JsonProperty("commentCount")
     private String commentCount;
     @JsonProperty("tags")
-    private List<Object> tags = null;
+    private List<String> tags = null;
     @JsonProperty("basename")
     private String basename;
     @JsonProperty("assets")
-    private List<Object> assets = null;
+    private List<Asset> assets = null;
     @JsonProperty("pingsSentUrl")
-    private List<Object> pingsSentUrl = null;
+    private List<String> pingsSentUrl = null;
     @JsonProperty("title")
     private String title;
     @JsonProperty("class")
@@ -71,6 +71,10 @@ public class Entry {
     private String createdDate;
     @JsonProperty("more")
     private String more;
+    @JsonProperty("format")
+    private String format;
+    @JsonProperty("unpublishedDate")
+    private String unpublishedDate;
     @JsonProperty("customFields")
     private List<CustomField> customFields = null;
     @JsonIgnore
@@ -137,12 +141,12 @@ public class Entry {
     }
 
     @JsonProperty("comments")
-    public List<Object> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
     @JsonProperty("comments")
-    public void setComments(List<Object> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
@@ -197,12 +201,12 @@ public class Entry {
     }
 
     @JsonProperty("trackbacks")
-    public List<Object> getTrackbacks() {
+    public List<Trackback> getTrackbacks() {
         return trackbacks;
     }
 
     @JsonProperty("trackbacks")
-    public void setTrackbacks(List<Object> trackbacks) {
+    public void setTrackbacks(List<Trackback> trackbacks) {
         this.trackbacks = trackbacks;
     }
 
@@ -227,12 +231,12 @@ public class Entry {
     }
 
     @JsonProperty("categories")
-    public List<Object> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
     @JsonProperty("categories")
-    public void setCategories(List<Object> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 
@@ -257,12 +261,12 @@ public class Entry {
     }
 
     @JsonProperty("tags")
-    public List<Object> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
     @JsonProperty("tags")
-    public void setTags(List<Object> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
@@ -277,22 +281,22 @@ public class Entry {
     }
 
     @JsonProperty("assets")
-    public List<Object> getAssets() {
+    public List<Asset> getAssets() {
         return assets;
     }
 
     @JsonProperty("assets")
-    public void setAssets(List<Object> assets) {
+    public void setAssets(List<Asset> assets) {
         this.assets = assets;
     }
 
     @JsonProperty("pingsSentUrl")
-    public List<Object> getPingsSentUrl() {
+    public List<String> getPingsSentUrl() {
         return pingsSentUrl;
     }
 
     @JsonProperty("pingsSentUrl")
-    public void setPingsSentUrl(List<Object> pingsSentUrl) {
+    public void setPingsSentUrl(List<String> pingsSentUrl) {
         this.pingsSentUrl = pingsSentUrl;
     }
 
@@ -334,6 +338,26 @@ public class Entry {
     @JsonProperty("more")
     public void setMore(String more) {
         this.more = more;
+    }
+    
+    @JsonProperty("format")
+    public String getFormat() {
+        return format;
+    }
+
+    @JsonProperty("format")
+    public void setFormat(String format) {
+        this.format = format;
+    }
+    
+    @JsonProperty("unpublishedDate")
+    public String getUnpublishedDate() {
+        return unpublishedDate;
+    }
+
+    @JsonProperty("unpublishedDate")
+    public void setUnpublishedDate(String unpublishedDate) {
+        this.unpublishedDate = unpublishedDate;
     }
 
     @JsonProperty("customFields")

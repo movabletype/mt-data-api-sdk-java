@@ -7,7 +7,6 @@ import org.movabletype.api.client.pojo.AssetItems;
 import org.movabletype.api.client.pojo.Authentication;
 import org.movabletype.api.client.pojo.Category;
 import org.movabletype.api.client.pojo.CategoryItems;
-import org.movabletype.api.client.pojo.CreateUser;
 import org.movabletype.api.client.pojo.Entry;
 import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.Site;
@@ -110,7 +109,7 @@ public interface MovableTypeApiClient {
     /******************************************************
      * User
      ******************************************************/
-    User createUser(CreateUser createUser) throws IOException;
+    User createUser(User user) throws IOException;
 
     User deleteUser(int user_id) throws IOException;
 

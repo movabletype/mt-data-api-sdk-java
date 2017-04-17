@@ -46,7 +46,7 @@ public class CreatedBy {
     }
 
     @JsonProperty("userpicUrl")
-    public Object getUserpicUrl() {
+    public String getUserpicUrl() {
         return userpicUrl;
     }
 

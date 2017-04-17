@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "status", "createdBy", "updatable", "lockedOut", "isSuperuser", "dateFormat", "systemPermissions", "email", "userpicUrl", "url", "id",
-        "tagDelimiter", "displayName", "modifiedBy", "modifiedDate", "language", "name", "textFormat", "createdDate", "customFields" })
+        "tagDelimiter", "displayName", "modifiedBy", "modifiedDate", "language", "name", "textFormat", "createdDate", "customFields", "password" })
 public class User {
 
     @JsonProperty("status")
@@ -37,7 +37,7 @@ public class User {
     @JsonProperty("url")
     private String url;
     @JsonProperty("id")
-    private String id;
+    private Integer id;
     @JsonProperty("tagDelimiter")
     private String tagDelimiter;
     @JsonProperty("displayName")
@@ -55,7 +55,9 @@ public class User {
     @JsonProperty("createdDate")
     private String createdDate;
     @JsonProperty("customFields")
-    private List<Object> customFields = null;
+    private List<CustomField> customFields = null;
+    @JsonProperty("password")
+    private String password;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -140,7 +142,7 @@ public class User {
     }
 
     @JsonProperty("userpicUrl")
-    public Object getUserpicUrl() {
+    public String getUserpicUrl() {
         return userpicUrl;
     }
 
@@ -160,12 +162,12 @@ public class User {
     }
 
     @JsonProperty("id")
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -250,13 +252,23 @@ public class User {
     }
 
     @JsonProperty("customFields")
-    public List<Object> getCustomFields() {
+    public List<CustomField> getCustomFields() {
         return customFields;
     }
 
     @JsonProperty("customFields")
-    public void setCustomFields(List<Object> customFields) {
+    public void setCustomFields(List<CustomField> customFields) {
         this.customFields = customFields;
+    }
+    
+    @JsonProperty("password")
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty("password")
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @JsonAnyGetter

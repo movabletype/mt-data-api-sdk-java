@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "label", "mimeType", "url", "filename", "description", "tags", "blog", "updatable", "modifiedBy", "modifiedDate", "createdBy",
-        "cratedDate", "type", "class", "fileExt", "parent", "meta" })
+        "cratedDate", "type", "class", "fileExt", "parent", "meta", "customFields" })
 public class Asset {
 
     @JsonProperty("id")
@@ -54,6 +54,8 @@ public class Asset {
     private Parent parent;
     @JsonProperty("meta")
     private Meta meta;
+    @JsonProperty("customFields")
+    private List<CustomField> customFields = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -235,6 +237,16 @@ public class Asset {
     @JsonProperty("meta")
     public void setMeta(Meta meta) {
         this.meta = meta;
+    }
+    
+    @JsonProperty("customFields")
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
+
+    @JsonProperty("customFields")
+    public void setCustomFields(List<CustomField> customFields) {
+        this.customFields = customFields;
     }
 
     @Override

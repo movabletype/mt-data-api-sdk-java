@@ -1,8 +1,8 @@
+
 package org.movabletype.api.client.pojo;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,39 +11,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "email", "displayName", "name", "password" })
-public class CreateUser {
+@JsonPropertyOrder({
+    "name",
+    "id"
+})
+public class Role {
 
-    @JsonProperty("email")
-    private String email;
-    @JsonProperty("displayName")
-    private String displayName;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("password")
-    private String password;
+    @JsonProperty("id")
+    private Integer id;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("email")
-    public String getEmail() {
-        return email;
-    }
-
-    @JsonProperty("email")
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @JsonProperty("displayName")
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    @JsonProperty("displayName")
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
 
     @JsonProperty("name")
     public String getName() {
@@ -55,14 +34,14 @@ public class CreateUser {
         this.name = name;
     }
 
-    @JsonProperty("password")
-    public String getPassword() {
-        return password;
+    @JsonProperty("id")
+    public Integer getId() {
+        return id;
     }
 
-    @JsonProperty("password")
-    public void setPassword(String password) {
-        this.password = password;
+    @JsonProperty("id")
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @JsonAnyGetter
