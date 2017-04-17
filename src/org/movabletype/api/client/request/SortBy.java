@@ -10,4 +10,6 @@ public class SortBy {
     public static String ID = "id";
     public static String BASENAME = "basename";
     public static String LABEL = "label";
+
+    public static String TITLE = "title";
 }

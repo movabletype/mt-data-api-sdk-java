@@ -140,6 +140,24 @@ entry = client.deleteEntry(site_id, entry_id);
 System.out.println(client.getResponseMessage());
 ```
 
+### Search
+
+```java
+// Searching the entries.
+// This endpoint is like a mt-search.cgi, but more faster.
+SearchParam search = new SearchParam();
+search.setBlog_id(2);
+search.setSearch("title:News");
+search.setLimit(5);
+search.setSearchMaxResults(5);
+EntryItems entryItems = client.search(search);
+for (Entry entry : entryItems.getItems()) {
+    System.out.println("Blog id     : " + entry.getBlog().getId());
+    System.out.println("Entry id    : " + entry.getId());
+    System.out.println("Entry title : " + entry.getTitle());
+}
+```
+
 ### Asset
 
 ```java

@@ -18,6 +18,7 @@ import org.movabletype.api.client.pojo.Version;
 import org.movabletype.api.client.request.AssetSearchParam;
 import org.movabletype.api.client.request.CategorySearchParam;
 import org.movabletype.api.client.request.EntrySearchParam;
+import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
 import org.movabletype.api.client.request.UploadParam;
 import org.movabletype.api.client.request.UserSearchParam;
@@ -120,4 +121,9 @@ public interface MovableTypeApiClient {
     User getUser(String user_id, String fields) throws IOException;
 
     Status unlockUser(int user_id) throws IOException;
+    
+    /******************************************************
+     * Search
+     ******************************************************/
+    EntryItems search(SearchParam search) throws IOException;
 }
