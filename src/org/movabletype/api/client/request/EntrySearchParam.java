@@ -83,6 +83,9 @@ public class EntrySearchParam {
         return sortOrder;
     }
 
+    /**
+     * @param sortOrder SortOrder.ASCEND, SortOrder.DESCEND ...
+     */
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
     }
@@ -115,6 +118,9 @@ public class EntrySearchParam {
         return status;
     }
 
+    /**
+     * @param status EntryStatus.PUBLISH, EntryStatus.DRAFT ...
+     */
     public void setStatus(String status) {
         this.status = status;
     }

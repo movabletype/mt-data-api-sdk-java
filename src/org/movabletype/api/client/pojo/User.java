@@ -66,6 +66,9 @@ public class User {
         return status;
     }
 
+    /**
+     * @param status UserStatus.ACTIVE, UserStatus.PENDING...
+     */
     @JsonProperty("status")
     public void setStatus(String status) {
         this.status = status;
@@ -176,6 +179,9 @@ public class User {
         return tagDelimiter;
     }
 
+    /**
+     * @param tagDelimiter TagDelimiter.COMMA, TagDelimiter.SPACE
+     */
     @JsonProperty("tagDelimiter")
     public void setTagDelimiter(String tagDelimiter) {
         this.tagDelimiter = tagDelimiter;
@@ -216,6 +222,9 @@ public class User {
         return language;
     }
 
+    /**
+     * @param language Language.JA, Language.EN_US ...
+     */
     @JsonProperty("language")
     public void setLanguage(String language) {
         this.language = language;

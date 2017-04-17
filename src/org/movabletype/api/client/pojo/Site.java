@@ -220,6 +220,9 @@ public class Site {
         return statusDefault;
     }
 
+    /**
+     * @param statusDefault SiteStatus.DRAFT, SiteStatus.PUBLISH
+     */
     @JsonProperty("statusDefault")
     public void setStatusDefault(String statusDefault) {
         this.statusDefault = statusDefault;
@@ -260,6 +263,9 @@ public class Site {
         return entryCustomPrefs;
     }
 
+    /**
+     * @param entryCustomPrefs CustomPrefs.TITLE ...or Each custom Fields - customfield_
+     */
     @JsonProperty("entryCustomPrefs")
     public void setEntryCustomPrefs(List<String> entryCustomPrefs) {
         this.entryCustomPrefs = entryCustomPrefs;
@@ -340,6 +346,9 @@ public class Site {
         return daysOrPosts;
     }
 
+    /**
+     * @param daysOrPosts DaysOrPosts.DAYS, DaysOrPosts.POSTS
+     */
     @JsonProperty("daysOrPosts")
     public void setDaysOrPosts(String daysOrPosts) {
         this.daysOrPosts = daysOrPosts;
@@ -370,6 +379,9 @@ public class Site {
         return convertParas;
     }
 
+    /**
+     * @param convertParas ConvertParas.DEFAULT, ConvertParas.RICHTEXT ...
+     */
     @JsonProperty("convertParas")
     public void setConvertParas(String convertParas) {
         this.convertParas = convertParas;
@@ -400,6 +412,9 @@ public class Site {
         return includeSystem;
     }
 
+    /**
+     * @param includeSystem IncludeSystem.PHP, IncludeSystem.DISABLED ...
+     */
     @JsonProperty("includeSystem")
     public void setIncludeSystem(String includeSystem) {
         this.includeSystem = includeSystem;
@@ -470,6 +485,9 @@ public class Site {
         return dateLanguage;
     }
 
+    /**
+     * @param dateLanguage DateLanguage.JAPANESE, DateLanguage.ENGLISH ...
+     */
     @JsonProperty("dateLanguage")
     public void setDateLanguage(String dateLanguage) {
         this.dateLanguage = dateLanguage;
@@ -530,6 +548,9 @@ public class Site {
         return language;
     }
 
+    /**
+     * @param language Language.JA, Language.EN_US ...
+     */
     @JsonProperty("language")
     public void setLanguage(String language) {
         this.language = language;
@@ -610,6 +631,9 @@ public class Site {
         return convertParasComments;
     }
 
+    /**
+     * @param convertParasComments ConvertParas.DEFAULT, ConvertParas.RICHTEXT ...
+     */
     @JsonProperty("convertParasComments")
     public void setConvertParasComments(String convertParasComments) {
         this.convertParasComments = convertParasComments;
@@ -880,6 +904,9 @@ public class Site {
         return pageCustomPrefs;
     }
 
+    /**
+     * @param pageCustomPrefs CustomPrefs.TITLE ...or Each custom Fields - customfield_
+     */
     @JsonProperty("pageCustomPrefs")
     public void setPageCustomPrefs(List<String> pageCustomPrefs) {
         this.pageCustomPrefs = pageCustomPrefs;
@@ -999,7 +1026,10 @@ public class Site {
     public String getCustomDynamicTemplates() {
         return customDynamicTemplates;
     }
-
+    
+    /**
+     * @param customDynamicTemplates CustomDynamicTemplates.ALL, CustomDynamicTemplates.ARCHIVES ...
+     */
     @JsonProperty("customDynamicTemplates")
     public void setCustomDynamicTemplates(String customDynamicTemplates) {
         this.customDynamicTemplates = customDynamicTemplates;

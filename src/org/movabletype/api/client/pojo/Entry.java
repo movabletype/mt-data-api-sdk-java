@@ -90,11 +90,15 @@ public class Entry {
         this.excerpt = excerpt;
     }
 
+    
     @JsonProperty("status")
     public String getStatus() {
         return status;
     }
 
+    /**
+     * @param status EntryStatus.PUBLISH, EntryStatus.DRAFT ...
+     */
     @JsonProperty("status")
     public void setStatus(String status) {
         this.status = status;
