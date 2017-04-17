@@ -1,7 +1,7 @@
-
 package org.movabletype.api.client.pojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -12,81 +12,53 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "blog",
-    "entry",
-    "id",
-    "date",
     "title",
     "excerpt",
     "blogName",
-    "url",
+    "createdDate",
+    "blog",
+    "date",
+    "status",
+    "customFields",
     "ip",
+    "url",
+    "modifiedDate",
+    "entry",
+    "id",
     "updatable"
 })
 public class Trackback {
 
-    @JsonProperty("blog")
-    private Blog blog;
-    @JsonProperty("entry")
-    private Entry entry;
-    @JsonProperty("id")
-    private Integer id;
-    @JsonProperty("date")
-    private String date;
     @JsonProperty("title")
     private String title;
     @JsonProperty("excerpt")
     private String excerpt;
     @JsonProperty("blogName")
     private String blogName;
-    @JsonProperty("url")
-    private String url;
+    @JsonProperty("createdDate")
+    private String createdDate;
+    @JsonProperty("blog")
+    private Blog blog;
+    @JsonProperty("date")
+    private String date;
+    @JsonProperty("status")
+    private String status;
+    @JsonProperty("customFields")
+    private List<Object> customFields = null;
     @JsonProperty("ip")
     private String ip;
+    @JsonProperty("url")
+    private String url;
+    @JsonProperty("modifiedDate")
+    private String modifiedDate;
+    @JsonProperty("entry")
+    private Entry entry;
+    @JsonProperty("id")
+    private Integer id;
     @JsonProperty("updatable")
     private Boolean updatable;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("blog")
-    public Blog getBlog() {
-        return blog;
-    }
-
-    @JsonProperty("blog")
-    public void setBlog(Blog blog) {
-        this.blog = blog;
-    }
-
-    @JsonProperty("entry")
-    public Entry getEntry() {
-        return entry;
-    }
-
-    @JsonProperty("entry")
-    public void setEntry(Entry entry) {
-        this.entry = entry;
-    }
-
-    @JsonProperty("id")
-    public Integer getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @JsonProperty("date")
-    public String getDate() {
-        return date;
-    }
-
-    @JsonProperty("date")
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     @JsonProperty("title")
     public String getTitle() {
@@ -118,14 +90,54 @@ public class Trackback {
         this.blogName = blogName;
     }
 
-    @JsonProperty("url")
-    public String getUrl() {
-        return url;
+    @JsonProperty("createdDate")
+    public String getCreatedDate() {
+        return createdDate;
     }
 
-    @JsonProperty("url")
-    public void setUrl(String url) {
-        this.url = url;
+    @JsonProperty("createdDate")
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    @JsonProperty("blog")
+    public Blog getBlog() {
+        return blog;
+    }
+
+    @JsonProperty("blog")
+    public void setBlog(Blog blog) {
+        this.blog = blog;
+    }
+
+    @JsonProperty("date")
+    public String getDate() {
+        return date;
+    }
+
+    @JsonProperty("date")
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    @JsonProperty("status")
+    public String getStatus() {
+        return status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @JsonProperty("customFields")
+    public List<Object> getCustomFields() {
+        return customFields;
+    }
+
+    @JsonProperty("customFields")
+    public void setCustomFields(List<Object> customFields) {
+        this.customFields = customFields;
     }
 
     @JsonProperty("ip")
@@ -136,6 +148,46 @@ public class Trackback {
     @JsonProperty("ip")
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    @JsonProperty("url")
+    public String getUrl() {
+        return url;
+    }
+
+    @JsonProperty("url")
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @JsonProperty("modifiedDate")
+    public String getModifiedDate() {
+        return modifiedDate;
+    }
+
+    @JsonProperty("modifiedDate")
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    @JsonProperty("entry")
+    public Entry getEntry() {
+        return entry;
+    }
+
+    @JsonProperty("entry")
+    public void setEntry(Entry entry) {
+        this.entry = entry;
+    }
+
+    @JsonProperty("id")
+    public Integer getId() {
+        return id;
+    }
+
+    @JsonProperty("id")
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @JsonProperty("updatable")

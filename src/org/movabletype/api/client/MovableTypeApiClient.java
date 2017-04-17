@@ -74,7 +74,7 @@ public interface MovableTypeApiClient {
 
     Entry deleteEntry(int site_id, Integer entry_id) throws IOException;
 
-    Entry getEntry(int site_id, int entry_id, String fields) throws IOException;
+    Entry getEntry(EntrySearchParam search) throws IOException;
 
     EntryItems searchEntry(EntrySearchParam search) throws IOException;
 

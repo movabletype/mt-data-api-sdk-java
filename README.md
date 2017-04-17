@@ -107,21 +107,24 @@ System.out.println(entry.getId());
 System.out.println(entry.getCreatedDate());
 
 // Searching the entries.
-EntrySearchParam entrySearchParam = new EntrySearchParam();
-entrySearchParam.setSite_id(2);
-entrySearchParam.setLimit(2);
-entrySearchParam.setSearch("Title");
-EntryItems entryItems = client.searchEntry(entrySearchParam);
+EntrySearchParam search = new EntrySearchParam();
+search.setSite_id(2);
+search.setLimit(2);
+search.setSearch("Title");
+EntryItems entryItems = client.searchEntry(search);
 for (Entry entry : entryItems.getItems()) {
     System.out.println(entry.getId());
     System.out.println(entry.getTitle());
 }
 
 // Retrieve a single entry by its ID.
-int site_id = 2;
-int entry_id = 10;
-String fields = "title,body";  // All fields is null
-Entry entry = client.getEntry(site_id, entry_id, fields);
+EntrySearchParam search = new EntrySearchParam();
+search.setSite_id(2);
+search.setEntry_id(10);
+search.setMaxComments(0);        // Maximum number of comments
+search.setMaxTrackbacks(0);      // Maximum number of received trackbacks
+search.setFields("title,body");  // All fields is null
+Entry entry = client.getEntry(search);
 System.out.println(entry.getId());
 System.out.println(entry.getTitle());
 System.out.println(entry.getBody());

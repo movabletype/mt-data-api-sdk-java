@@ -350,11 +350,9 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public Entry getEntry(int site_id, int entry_id, String fields) throws IOException {
+    public Entry getEntry(EntrySearchParam search) throws IOException {
         this.getToken();
-        if (fields == null)
-            fields = "";
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id + "?fields=" + fields;
+        String url = endpoint + "/" + version + "/sites/" + search.getSite_id() + "/entries/" + search.getEntry_id() + "?" + search.getQueryString();
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();

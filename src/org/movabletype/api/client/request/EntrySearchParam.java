@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 public class EntrySearchParam {
 
     int site_id;
+    int entry_id;
     String search;
     String searchFields;
     int limit;
@@ -28,6 +29,14 @@ public class EntrySearchParam {
 
     public void setSite_id(int site_id) {
         this.site_id = site_id;
+    }
+
+    public int getEntry_id() {
+        return entry_id;
+    }
+
+    public void setEntry_id(int entry_id) {
+        this.entry_id = entry_id;
     }
 
     public String getSearch() {
@@ -163,6 +172,8 @@ public class EntrySearchParam {
         queryItems.put("search", search);
         if (site_id != 0)
             queryItems.put("site_id", site_id);
+        if (entry_id != 0)
+            queryItems.put("entry_id", entry_id);
         queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
         if (limit != 0)
