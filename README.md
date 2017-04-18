@@ -71,6 +71,24 @@ for (Site site : siteItems.getItems()) {
    System.out.println(site.getName());
 }
 
+// Retrieve a list of sites by user.
+SiteSearchParam siteSearchParam = new SiteSearchParam();
+siteSearchParam.setUser_id("me");   // number or 'me' The user ID or the word ‘me’.
+SiteItems siteItems = client.searchSites(siteSearchParam);
+siteItems.getItems();
+for (Site site : siteItems.getItems()) {
+   System.out.println(site.getId());
+}
+
+// Retrieve a list of sites by parent site
+SiteSearchParam siteSearchParam = new SiteSearchParam();
+siteSearchParam.setSite_id(1);
+SiteItems siteItems = client.searchSites(siteSearchParam);
+siteItems.getItems();
+for (Site site : siteItems.getItems()) {
+   System.out.println(site.getId());
+}
+
 // Retrieve a single website/blog by its ID.
 int site_id = 4;
 String fields = "id,name";  // All fields is null
@@ -117,6 +135,33 @@ for (Entry entry : entryItems.getItems()) {
     System.out.println(entry.getTitle());
 }
 
+// Retrieve a list of entries by category.
+EntrySearchParam search = new EntrySearchParam();
+search.setSite_id(2);
+search.setCategory_id(5);
+EntryItems entryItems = client.searchEntry(search);
+for (Entry entry : entryItems.getItems()) {
+    System.out.println(entry.getId());
+}
+
+// Retrieve a list of entries that with asset.
+EntrySearchParam search = new EntrySearchParam();
+search.setSite_id(2);
+search.setAsset_id(5);
+EntryItems entryItems = client.searchEntry(search);
+for (Entry entry : entryItems.getItems()) {
+    System.out.println(entry.getId());
+}
+
+// Searching the entries that with tag.
+EntrySearchParam search = new EntrySearchParam();
+search.setSite_id(2);
+search.setTag_id(5);
+EntryItems entryItems = client.searchEntry(search);
+for (Entry entry : entryItems.getItems()) {
+    System.out.println(entry.getId());
+}
+
 // Retrieve a single entry by its ID.
 EntrySearchParam search = new EntrySearchParam();
 search.setSite_id(2);
@@ -152,9 +197,9 @@ search.setLimit(5);
 search.setSearchMaxResults(5);
 EntryItems entryItems = client.search(search);
 for (Entry entry : entryItems.getItems()) {
-    System.out.println("Blog id     : " + entry.getBlog().getId());
-    System.out.println("Entry id    : " + entry.getId());
-    System.out.println("Entry title : " + entry.getTitle());
+    System.out.println(entry.getBlog().getId());
+    System.out.println(entry.getId());
+    System.out.println(entry.getTitle());
 }
 ```
 
@@ -173,14 +218,41 @@ System.out.println(asset.getId());
 System.out.println(client.getResponseMessage());
 
 // Retrieve list of assets in the specified site.
-int site_id = 1;
 AssetSearchParam assetSearchParam = new AssetSearchParam();
+assetSearchParam.setSite_id(1);
 assetSearchParam.setSearch("melody");
 assetSearchParam.setSearchFields("label");
-AssetItems assteItems = client.searchAsset(site_id, assetSearchParam);
+AssetItems assteItems = client.searchAsset(assetSearchParam);
 for (Asset asset : assteItems.getItems()) {
     System.out.println(asset.getId());
     System.out.println(asset.getUrl());
+}
+
+// Retrieve list of assets that related with entry.
+AssetSearchParam assetSearchParam = new AssetSearchParam();
+assetSearchParam.setSite_id(1);
+assetSearchParam.setEntry_id(2);
+AssetItems assteItems = client.searchAsset(assetSearchParam);
+for (Asset asset : assteItems.getItems()) {
+    System.out.println(asset.getId());
+}
+
+// Retrieve list of assets that related with page.
+AssetSearchParam assetSearchParam = new AssetSearchParam();
+assetSearchParam.setSite_id(1);
+assetSearchParam.setPage_id(5);
+AssetItems assteItems = client.searchAsset(assetSearchParam);
+for (Asset asset : assteItems.getItems()) {
+    System.out.println(asset.getId());
+}
+
+// Retrieve list of assets that related with tag.
+AssetSearchParam assetSearchParam = new AssetSearchParam();
+assetSearchParam.setSite_id(1);
+assetSearchParam.setTag_id(10);
+AssetItems assteItems = client.searchAsset(assetSearchParam);
+for (Asset asset : assteItems.getItems()) {
+    System.out.println(asset.getId());
 }
 
 // Retrieve a single asset by its ID.
@@ -218,11 +290,20 @@ category = client.createCategory(site_id, category);
 System.out.println(category.getId());
 
 // Retrieve a list of categories.
-int site_id = 1;
 CategorySearchParam categorySearchParam = new CategorySearchParam();
+categorySearchParam.setSite_id(1);
 categorySearchParam.setSearch("News");
 categorySearchParam.setSearchFields("label");
-CategoryItems categoryItems = client.searchCategory(site_id, categorySearchParam);
+CategoryItems categoryItems = client.searchCategory(categorySearchParam);
+for (Category category : categoryItems.getItems()) {
+    System.out.println(category.getLabel());
+}
+
+// Retrieve a list of categories that related with entry.
+CategorySearchParam categorySearchParam = new CategorySearchParam();
+categorySearchParam.setSite_id(1);
+categorySearchParam.setEntry_id(2);
+CategoryItems categoryItems = client.searchCategory(categorySearchParam);
 for (Category category : categoryItems.getItems()) {
     System.out.println(category.getLabel());
 }

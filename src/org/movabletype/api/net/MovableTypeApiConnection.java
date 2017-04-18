@@ -26,6 +26,7 @@ import org.movabletype.api.client.pojo.Token;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings("restriction")
 public class MovableTypeApiConnection {
 
     private HttpURLConnection urlconn;

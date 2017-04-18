@@ -22,6 +22,9 @@ public class EntrySearchParam {
     String dateField;
     String dateFrom;
     String dateTo;
+    int category_id;
+    int asset_id;
+    int tag_id;
 
     public int getSite_id() {
         return site_id;
@@ -173,13 +176,33 @@ public class EntrySearchParam {
         this.dateTo = dateTo;
     }
 
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
+
+    public int getAsset_id() {
+        return asset_id;
+    }
+
+    public void setAsset_id(int asset_id) {
+        this.asset_id = asset_id;
+    }
+
+    public int getTag_id() {
+        return tag_id;
+    }
+
+    public void setTag_id(int tag_id) {
+        this.tag_id = tag_id;
+    }
+
     public String getQueryString() {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
-        if (site_id != 0)
-            queryItems.put("site_id", site_id);
-        if (entry_id != 0)
-            queryItems.put("entry_id", entry_id);
         queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
         if (limit != 0)

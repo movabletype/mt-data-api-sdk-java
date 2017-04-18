@@ -90,7 +90,7 @@ public interface MovableTypeApiClient {
 
     Asset getAsset(int site_id, int asset_id, String fields) throws IOException;
 
-    AssetItems searchAsset(int site_id, AssetSearchParam search) throws IOException;
+    AssetItems searchAsset(AssetSearchParam search) throws IOException;
 
     Asset updateAsset(int site_id, Asset asset) throws IOException;
 
@@ -103,7 +103,7 @@ public interface MovableTypeApiClient {
 
     Category getCategory(int site_id, int category_id, String fields) throws IOException;
 
-    CategoryItems searchCategory(int site_id, CategorySearchParam search) throws IOException;
+    CategoryItems searchCategory(CategorySearchParam search) throws IOException;
 
     Category updateCategory(int site_id, Category category) throws IOException;
 

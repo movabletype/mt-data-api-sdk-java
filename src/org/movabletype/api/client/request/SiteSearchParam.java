@@ -17,6 +17,7 @@ public class SiteSearchParam {
     String dateField;
     String dateFrom;
     String dateTo;
+    int site_id;
 
     public String getUser_id() {
         return user_id;
@@ -120,6 +121,14 @@ public class SiteSearchParam {
 
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
+    }
+    
+    public int getSite_id() {
+        return site_id;
+    }
+
+    public void setSite_id(int site_id) {
+        this.site_id = site_id;
     }
 
     public String getQueryString() {

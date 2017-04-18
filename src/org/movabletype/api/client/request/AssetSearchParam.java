@@ -15,6 +15,9 @@ public class AssetSearchParam {
     String dateField;
     String dateFrom;
     String dateTo;
+    int entry_id;
+    int page_id;
+    int tag_id;
 
     public int getSite_id() {
         return site_id;
@@ -111,12 +114,34 @@ public class AssetSearchParam {
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
+    
+    public int getEntry_id() {
+        return entry_id;
+    }
+
+    public void setEntry_id(int entry_id) {
+        this.entry_id = entry_id;
+    }
+
+    public int getPage_id() {
+        return page_id;
+    }
+
+    public void setPage_id(int page_id) {
+        this.page_id = page_id;
+    }
+
+    public int getTag_id() {
+        return tag_id;
+    }
+
+    public void setTag_id(int tag_id) {
+        this.tag_id = tag_id;
+    }
 
     public String getQueryString() {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
-        if (site_id != 0)
-            queryItems.put("site_id", site_id);
         queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
         if (offset != 0)

@@ -276,7 +276,16 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     @Override
     public SiteItems searchSites(SiteSearchParam siteSearchParam) throws IOException {
         this.getToken();
-        String url = endpoint + "/" + version + "/sites?" + siteSearchParam.getQueryString();
+        String user_id = siteSearchParam.getUser_id();
+        int site_id = siteSearchParam.getSite_id();
+        String url = new String();
+        if ( user_id != null ) {
+            url = endpoint + "/" + version + "/users/" + user_id +"/sites?" + siteSearchParam.getQueryString();
+        } else if ( site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/children?" + siteSearchParam.getQueryString();
+        } else {
+            url = endpoint + "/" + version + "/sites?" + siteSearchParam.getQueryString();
+        }
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -365,8 +374,20 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     @Override
     public EntryItems searchEntry(EntrySearchParam search) throws IOException {
         int  site_id = search.getSite_id();
+        int  category_id = search.getCategory_id();
+        int  asset_id = search.getAsset_id();
+        int  tag_id = search.getTag_id();
         this.getToken();
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries?" + search.getQueryString();
+        String url = new String();
+        if ( category_id != 0 && site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/categories/" + category_id + "/entries?" + search.getQueryString();
+        } else if ( asset_id != 0 && site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/assets/" + asset_id + "/entries?" + search.getQueryString();
+        } else if ( tag_id != 0 && site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/tags/" + tag_id + "/entries?" + search.getQueryString();
+        } else {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/entries?" + search.getQueryString();
+        }
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -480,9 +501,22 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public AssetItems searchAsset(int site_id, AssetSearchParam search) throws IOException {
+    public AssetItems searchAsset(AssetSearchParam search) throws IOException {
         this.getToken();
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/assets?" + search.getQueryString();
+        int site_id = search.getSite_id();
+        int entry_id = search.getEntry_id();
+        int page_id = search.getPage_id();
+        int tag_id = search.getTag_id();
+        String url = new String();
+        if ( entry_id != 0 &&  site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" +  entry_id + "/assets?" + search.getQueryString();
+        } else if ( page_id != 0 &&  site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/pages/" +  page_id + "/assets?" + search.getQueryString();
+        } else if ( tag_id != 0 &&  site_id != 0 ) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/tags/" +  tag_id + "/assets?" + search.getQueryString();
+        } else {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/assets?" + search.getQueryString();
+        }
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -554,9 +588,16 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public CategoryItems searchCategory(int site_id, CategorySearchParam search) throws IOException {
+    public CategoryItems searchCategory(CategorySearchParam search) throws IOException {
         this.getToken();
-        String url = endpoint + "/" + version + "/sites/" + site_id + "/categories?" + search.getQueryString();
+        int site_id = search.getSite_id();
+        int entry_id = search.getEntry_id();
+        String url;
+        if ( site_id != 0 && entry_id != 0) {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/entries/"+ entry_id + "/categories?" + search.getQueryString();
+        } else {
+            url = endpoint + "/" + version + "/sites/" + site_id + "/categories?" + search.getQueryString();
+        }
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
@@ -669,9 +710,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     /******************************************************
-     * Site
-     * 
-     * @throws IOException
+     * Search
      ******************************************************/
     
     @Override
