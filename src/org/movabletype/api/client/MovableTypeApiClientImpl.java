@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.net.URLConnection;
 import java.util.HashMap;
 
-import org.movabletype.api.net.MovableTypeApiConnection;
 import org.movabletype.api.client.pojo.Asset;
 import org.movabletype.api.client.pojo.AssetItems;
 import org.movabletype.api.client.pojo.Authentication;
@@ -20,6 +19,7 @@ import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
 import org.movabletype.api.client.pojo.Status;
+import org.movabletype.api.client.pojo.TemplateItems;
 import org.movabletype.api.client.pojo.Token;
 import org.movabletype.api.client.pojo.User;
 import org.movabletype.api.client.pojo.UserItems;
@@ -29,8 +29,10 @@ import org.movabletype.api.client.request.CategorySearchParam;
 import org.movabletype.api.client.request.EntrySearchParam;
 import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
+import org.movabletype.api.client.request.TemplateSearchParam;
 import org.movabletype.api.client.request.UploadParam;
 import org.movabletype.api.client.request.UserSearchParam;
+import org.movabletype.api.net.MovableTypeApiConnection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -240,7 +242,6 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(site);
-        System.out.println(json);
         conn.addBodyPart("blog=" + json);
         Site createSite = mapper.readValue(conn.getResponseBody(), Site.class);
         conn.disconnect();
@@ -442,7 +443,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         requestBody.put("path", upload.getUploadPath());
         requestBody.put("autoRenameIfExists", upload.isAutoRenameIfExists());
         requestBody.put("normalizeOrientation", upload.isNormalizeOrientation());
-        for (java.util.Map.Entry<String, Comparable> req : requestBody.entrySet()) {// [9]
+        for (java.util.Map.Entry<String, Comparable> req : requestBody.entrySet()) {
             writer.append("--" + boundary).append(CRLF);
             writer.append("Content-Disposition: form-data; name=\"" + req.getKey() + "\"").append(CRLF);
             writer.append(CRLF);
@@ -700,7 +701,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     @Override
     public Status unlockUser(int user_id) throws IOException {
         this.getToken();
-        String url = endpoint + "/" + version + "//users/" + user_id + "/unlock";
+        String url = endpoint + "/" + version + "/users/" + user_id + "/unlock";
         conn.connectUrl(url);
         conn.setRequestMethod("POST");
         ObjectMapper mapper = new ObjectMapper();
@@ -717,12 +718,40 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     public EntryItems search(SearchParam search) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/search?" + search.getQueryString();
-        System.out.println(url);
         conn.connectUrl(url);
         conn.setRequestMethod("GET");
         ObjectMapper mapper = new ObjectMapper();
         EntryItems entries = mapper.readValue(conn.getResponseBody(), EntryItems.class);
         conn.disconnect();
         return entries;
+    }
+
+    /******************************************************
+     * Template
+     ******************************************************/
+
+    @Override
+    public Status rebuild(int site_id, int template_id) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/templates/" + template_id + "/publish";
+        conn.connectUrl(url);
+        conn.setRequestMethod("POST");
+        ObjectMapper mapper = new ObjectMapper();
+        Status status = mapper.readValue(conn.getResponseBody(), Status.class);
+        conn.disconnect();
+        return status;
+    }
+
+    @Override
+    public TemplateItems searchTemplate(TemplateSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/templates?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        TemplateItems templates = mapper.readValue(conn.getResponseBody(), TemplateItems.class);
+        conn.disconnect();
+        return templates;
     }
 }

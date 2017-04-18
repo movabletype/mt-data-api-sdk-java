@@ -12,6 +12,7 @@ import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
 import org.movabletype.api.client.pojo.Status;
+import org.movabletype.api.client.pojo.TemplateItems;
 import org.movabletype.api.client.pojo.User;
 import org.movabletype.api.client.pojo.UserItems;
 import org.movabletype.api.client.pojo.Version;
@@ -20,6 +21,7 @@ import org.movabletype.api.client.request.CategorySearchParam;
 import org.movabletype.api.client.request.EntrySearchParam;
 import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
+import org.movabletype.api.client.request.TemplateSearchParam;
 import org.movabletype.api.client.request.UploadParam;
 import org.movabletype.api.client.request.UserSearchParam;
 
@@ -126,4 +128,11 @@ public interface MovableTypeApiClient {
      * Search
      ******************************************************/
     EntryItems search(SearchParam search) throws IOException;
+
+    /******************************************************
+     * Template
+     ******************************************************/
+    Status rebuild(int site_id, int template_id) throws IOException;
+
+    TemplateItems searchTemplate(TemplateSearchParam search) throws IOException;
 }
