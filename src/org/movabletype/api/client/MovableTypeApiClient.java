@@ -12,6 +12,7 @@ import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
 import org.movabletype.api.client.pojo.Status;
+import org.movabletype.api.client.pojo.Template;
 import org.movabletype.api.client.pojo.TemplateItems;
 import org.movabletype.api.client.pojo.User;
 import org.movabletype.api.client.pojo.UserItems;
@@ -133,6 +134,16 @@ public interface MovableTypeApiClient {
      * Template
      ******************************************************/
     Status rebuild(int site_id, int template_id) throws IOException;
+
+    Status resetAllTemplate(int site_id, String refresh_type) throws IOException;
+
+    Status resetTemplate(int site_id, int template_id) throws IOException;
+
+    Template createTemplate(int site_id, Template template) throws IOException;
+
+    Template updateTemplate(int site_id, Template template) throws IOException;
+
+    Template deleteTemplate(int site_id, int template_id ) throws IOException;
 
     TemplateItems searchTemplate(TemplateSearchParam search) throws IOException;
 }

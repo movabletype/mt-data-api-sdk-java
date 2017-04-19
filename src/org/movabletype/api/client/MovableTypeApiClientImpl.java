@@ -19,6 +19,7 @@ import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
 import org.movabletype.api.client.pojo.Status;
+import org.movabletype.api.client.pojo.Template;
 import org.movabletype.api.client.pojo.TemplateItems;
 import org.movabletype.api.client.pojo.Token;
 import org.movabletype.api.client.pojo.User;
@@ -740,6 +741,78 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         Status status = mapper.readValue(conn.getResponseBody(), Status.class);
         conn.disconnect();
         return status;
+    }
+
+    @Override
+    public Status resetAllTemplate(int site_id, String refresh_type) throws IOException {
+        this.getToken();
+        String refresh_type_query = new String();
+        if ( refresh_type != null ) {
+            refresh_type_query = "?refresh_type=" + refresh_type;
+        }
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/refresh_templates" + refresh_type_query;
+        conn.connectUrl(url);
+        conn.setRequestMethod("POST");
+        ObjectMapper mapper = new ObjectMapper();
+        Status status = mapper.readValue(conn.getResponseBody(), Status.class);
+        conn.disconnect();
+        return status;
+    }
+
+    @Override
+    public Status resetTemplate(int site_id, int template_id) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/templates/"+ template_id + "/refresh";
+        conn.connectUrl(url);
+        conn.setRequestMethod("POST");
+        ObjectMapper mapper = new ObjectMapper();
+        Status status = mapper.readValue(conn.getResponseBody(), Status.class);
+        conn.disconnect();
+        return status;
+    }
+
+    @Override
+    public Template createTemplate(int site_id, Template template) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/templates";
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(template);
+        conn.addBodyPart("template=" + json);
+        template = mapper.readValue(conn.getResponseBody(), Template.class);
+        conn.disconnect();
+        return template;
+    }
+
+    @Override
+    public Template updateTemplate(int site_id, Template template) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/templates/" + template.getId();
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(template);
+        conn.addBodyPart("template=" + json);
+        template = mapper.readValue(conn.getResponseBody(), Template.class);
+        conn.disconnect();
+        return template;
+    }
+
+    @Override
+    public Template deleteTemplate(int site_id, int template_id) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/templates/" + template_id;
+        conn.connectUrl(url);
+        conn.setRequestMethod("DELETE");
+        ObjectMapper mapper = new ObjectMapper();
+        Template template = mapper.readValue(conn.getResponseBody(), Template.class);
+        conn.disconnect();
+        return template;
     }
 
     @Override
