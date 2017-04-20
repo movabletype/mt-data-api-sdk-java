@@ -16,11 +16,14 @@ import org.movabletype.api.client.pojo.Category;
 import org.movabletype.api.client.pojo.CategoryItems;
 import org.movabletype.api.client.pojo.Entry;
 import org.movabletype.api.client.pojo.EntryItems;
+import org.movabletype.api.client.pojo.FolderItems;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
 import org.movabletype.api.client.pojo.Status;
 import org.movabletype.api.client.pojo.Template;
 import org.movabletype.api.client.pojo.TemplateItems;
+import org.movabletype.api.client.pojo.Theme;
+import org.movabletype.api.client.pojo.ThemeItems;
 import org.movabletype.api.client.pojo.Token;
 import org.movabletype.api.client.pojo.User;
 import org.movabletype.api.client.pojo.UserItems;
@@ -28,6 +31,7 @@ import org.movabletype.api.client.pojo.Version;
 import org.movabletype.api.client.request.AssetSearchParam;
 import org.movabletype.api.client.request.CategorySearchParam;
 import org.movabletype.api.client.request.EntrySearchParam;
+import org.movabletype.api.client.request.FolderSearchParam;
 import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
 import org.movabletype.api.client.request.TemplateSearchParam;
@@ -826,5 +830,109 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         TemplateItems templates = mapper.readValue(conn.getResponseBody(), TemplateItems.class);
         conn.disconnect();
         return templates;
+    }
+
+    /******************************************************
+     * Theme
+     ******************************************************/
+
+    @Override
+    public ThemeItems getThemeList() throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/themes";
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        ThemeItems themes = mapper.readValue(conn.getResponseBody(), ThemeItems.class);
+        conn.disconnect();
+        return themes;
+    }
+
+    @Override
+    public Theme getTheme(String theme_id) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/themes/" + theme_id;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        Theme theme = mapper.readValue(conn.getResponseBody(), Theme.class);
+        conn.disconnect();
+        return theme;
+    }
+
+    @Override
+    public Status applyTheme(int site_id, String theme_id) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/themes/" + theme_id + "/apply";
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        ObjectMapper mapper = new ObjectMapper();
+        Status status = mapper.readValue(conn.getResponseBody(), Status.class);
+        conn.disconnect();
+        return status;
+    }
+
+    /******************************************************
+     * Folder
+     ******************************************************/
+
+    @Override
+    public FolderItems searchFolder(FolderSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        String url = endpoint + "/" + version + "/sites/"+ site_id + "/folders?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        FolderItems folders = mapper.readValue(conn.getResponseBody(), FolderItems.class);
+        conn.disconnect();
+        return folders;
+    }
+
+    @Override
+    public FolderItems searchParentsFolder(int site_id, int folder_id, int maxDepth, int includeCurrent) throws IOException {
+        this.getToken();
+        String query = "includeCurrent=" + includeCurrent;
+        if ( maxDepth != 0 ) {
+            query = query + "&maxDepth=" + maxDepth;
+        }
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/folders/" + folder_id + "/parents?" + query;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        FolderItems folders = mapper.readValue(conn.getResponseBody(), FolderItems.class);
+        conn.disconnect();
+        return folders;
+    }
+
+    @Override
+    public FolderItems searchSiblingsFolder(FolderSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        int folder_id = search.getFolder_id();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/folders/" + folder_id + "/siblings?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        FolderItems folders = mapper.readValue(conn.getResponseBody(), FolderItems.class);
+        conn.disconnect();
+        return folders;
+    }
+
+    @Override
+    public FolderItems searchChildFolder(int site_id, int folder_id, int maxDepth, int includeCurrent) throws IOException {
+        this.getToken();
+        String query = "includeCurrent=" + includeCurrent;
+        if ( maxDepth != 0 ) {
+            query = query + "&maxDepth=" + maxDepth;
+        }
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/folders/" + folder_id + "/siblings?" + query;
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        FolderItems folders = mapper.readValue(conn.getResponseBody(), FolderItems.class);
+        conn.disconnect();
+        return folders;
     }
 }

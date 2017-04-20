@@ -2,23 +2,25 @@ package org.movabletype.api.client.request;
 
 import java.util.LinkedHashMap;
 
-public class AssetSearchParam {
+public class FolderSearchParam {
     int site_id;
-    String search;
-    String searchFields;
+    int folder_id;
     int limit;
     int offset;
-    String _class;
     String sortBy;
     String sortOrder;
     String fields;
+    String searchFields;
+    String search;
+    String includeIds;
+    String excludeIds;
+    int top;
     String dateField;
     String dateFrom;
     String dateTo;
-    int entry_id;
-    int page_id;
-    int tag_id;
-
+    int maxDepth;
+    int includeCurrent;
+    
     public int getSite_id() {
         return site_id;
     }
@@ -59,18 +61,11 @@ public class AssetSearchParam {
         this.offset = offset;
     }
 
-    public String get_Class() {
-        return _class;
-    }
-
-    public void set_Class(String _class) {
-        this._class = _class;
-    }
-
     public String getSortBy() {
         return sortBy;
     }
 
+    
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
     }
@@ -117,47 +112,82 @@ public class AssetSearchParam {
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
-    
-    public int getEntry_id() {
-        return entry_id;
+
+    public String getIncludeIds() {
+        return includeIds;
     }
 
-    public void setEntry_id(int entry_id) {
-        this.entry_id = entry_id;
+    public void setIncludeIds(String includeIds) {
+        this.includeIds = includeIds;
     }
 
-    public int getPage_id() {
-        return page_id;
+    public String getExcludeIds() {
+        return excludeIds;
     }
 
-    public void setPage_id(int page_id) {
-        this.page_id = page_id;
+    public void setExcludeIds(String excludeIds) {
+        this.excludeIds = excludeIds;
     }
 
-    public int getTag_id() {
-        return tag_id;
+    public int getTop() {
+        return top;
     }
 
-    public void setTag_id(int tag_id) {
-        this.tag_id = tag_id;
+    public void setTop(int top) {
+        this.top = top;
+    }
+
+    public int getFolder_id() {
+        return folder_id;
+    }
+
+    public void setFolder_id(int folder_id) {
+        this.folder_id = folder_id;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    public void setMaxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
+    }
+
+    public int getIncludeCurrent() {
+        return includeCurrent;
+    }
+
+    public void setIncludeCurrent(int includeCurrent) {
+        this.includeCurrent = includeCurrent;
     }
 
     public String getQueryString() {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
+        if (site_id != 0)
+            queryItems.put("site_id", site_id);
+        if (folder_id != 0)
+            queryItems.put("folder_id", folder_id);
         if (limit != 0)
             queryItems.put("limit", limit);
         if (offset != 0)
             queryItems.put("offset", offset);
-        queryItems.put("class", _class);
         queryItems.put("sortBy", sortBy);
         queryItems.put("sortOrder", sortOrder);
         queryItems.put("fields", fields);
+        queryItems.put("searchFields", searchFields);
+        queryItems.put("includeIds", includeIds);
+        queryItems.put("excludeIds", excludeIds);
+        if (top != 0)
+            queryItems.put("top", top);      
         queryItems.put("dateField", dateField);
         queryItems.put("dateFrom", dateFrom);
         queryItems.put("dateTo", dateTo);
+        if (maxDepth != 0)
+            queryItems.put("maxDepth", maxDepth);     
+        if (includeCurrent != 0)
+            queryItems.put("includeCurrent", includeCurrent);     
         return UrlQueryString.buildQueryString(queryItems);
     }
-
 }

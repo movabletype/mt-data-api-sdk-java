@@ -9,17 +9,21 @@ import org.movabletype.api.client.pojo.Category;
 import org.movabletype.api.client.pojo.CategoryItems;
 import org.movabletype.api.client.pojo.Entry;
 import org.movabletype.api.client.pojo.EntryItems;
+import org.movabletype.api.client.pojo.FolderItems;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
 import org.movabletype.api.client.pojo.Status;
 import org.movabletype.api.client.pojo.Template;
 import org.movabletype.api.client.pojo.TemplateItems;
+import org.movabletype.api.client.pojo.Theme;
+import org.movabletype.api.client.pojo.ThemeItems;
 import org.movabletype.api.client.pojo.User;
 import org.movabletype.api.client.pojo.UserItems;
 import org.movabletype.api.client.pojo.Version;
 import org.movabletype.api.client.request.AssetSearchParam;
 import org.movabletype.api.client.request.CategorySearchParam;
 import org.movabletype.api.client.request.EntrySearchParam;
+import org.movabletype.api.client.request.FolderSearchParam;
 import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
 import org.movabletype.api.client.request.TemplateSearchParam;
@@ -146,4 +150,24 @@ public interface MovableTypeApiClient {
     Template deleteTemplate(int site_id, int template_id ) throws IOException;
 
     TemplateItems searchTemplate(TemplateSearchParam search) throws IOException;
+
+    /******************************************************
+     * Theme
+     ******************************************************/
+    ThemeItems getThemeList() throws IOException;
+
+    Theme getTheme(String theme_id) throws IOException;
+
+    Status applyTheme(int site_id, String theme_id) throws IOException;
+
+    /******************************************************
+     * Folder
+     ******************************************************/
+    FolderItems searchFolder(FolderSearchParam search) throws IOException;
+
+    FolderItems searchParentsFolder(int site_id, int folder_id, int maxDepth, int includeCurrent) throws IOException;
+
+    FolderItems searchSiblingsFolder(FolderSearchParam search) throws IOException;
+
+    FolderItems searchChildFolder(int site_id, int folder_id, int maxDepth, int includeCurrent) throws IOException;
 }

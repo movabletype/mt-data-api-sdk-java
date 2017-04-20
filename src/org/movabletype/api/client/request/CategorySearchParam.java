@@ -170,8 +170,8 @@ public class CategorySearchParam {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
         queryItems.put("searchFields", searchFields);
-        if (offset != 0)
-            queryItems.put("offset", limit);
+        if (limit != 0)
+            queryItems.put("limit", limit);
         if (offset != 0)
             queryItems.put("offset", offset);
         queryItems.put("sortBy", sortBy);
