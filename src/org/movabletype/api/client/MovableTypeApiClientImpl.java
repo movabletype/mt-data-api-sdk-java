@@ -283,7 +283,7 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
-    public SiteItems searchSites(SiteSearchParam siteSearchParam) throws IOException {
+    public SiteItems searchSite(SiteSearchParam siteSearchParam) throws IOException {
         this.getToken();
         String user_id = siteSearchParam.getUser_id();
         int site_id = siteSearchParam.getSite_id();

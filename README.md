@@ -64,7 +64,7 @@ System.out.println(client.getResponseMessage());
 // Retrieve a list of sites.
 SiteSearchParam siteSearchParam = new SiteSearchParam();
 siteSearchParam.setSearch("Blog");
-SiteItems siteItems = client.searchSites(siteSearchParam);
+SiteItems siteItems = client.searchSite(siteSearchParam);
 siteItems.getItems();
 for (Site site : siteItems.getItems()) {
    System.out.println(site.getId());
@@ -74,7 +74,7 @@ for (Site site : siteItems.getItems()) {
 // Retrieve a list of sites by user.
 SiteSearchParam siteSearchParam = new SiteSearchParam();
 siteSearchParam.setUser_id("me");   // number or 'me' The user ID or the word ‘me’.
-SiteItems siteItems = client.searchSites(siteSearchParam);
+SiteItems siteItems = client.searchSite(siteSearchParam);
 siteItems.getItems();
 for (Site site : siteItems.getItems()) {
    System.out.println(site.getId());
@@ -83,7 +83,7 @@ for (Site site : siteItems.getItems()) {
 // Retrieve a list of sites by parent site
 SiteSearchParam siteSearchParam = new SiteSearchParam();
 siteSearchParam.setSite_id(1);
-SiteItems siteItems = client.searchSites(siteSearchParam);
+SiteItems siteItems = client.searchSite(siteSearchParam);
 siteItems.getItems();
 for (Site site : siteItems.getItems()) {
    System.out.println(site.getId());

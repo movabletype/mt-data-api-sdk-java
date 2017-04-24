@@ -72,7 +72,7 @@ public interface MovableTypeApiClient {
 
     Site getSite(int site_id, String fields) throws IOException;
 
-    SiteItems searchSites(SiteSearchParam siteSearchParam) throws IOException;
+    SiteItems searchSite(SiteSearchParam siteSearchParam) throws IOException;
 
     Site updateSite(Site site) throws IOException;
 
