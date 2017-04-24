@@ -10,8 +10,10 @@ import org.movabletype.api.client.pojo.CategoryItems;
 import org.movabletype.api.client.pojo.Entry;
 import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.FolderItems;
+import org.movabletype.api.client.pojo.Provider;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
+import org.movabletype.api.client.pojo.StatItems;
 import org.movabletype.api.client.pojo.Status;
 import org.movabletype.api.client.pojo.Template;
 import org.movabletype.api.client.pojo.TemplateItems;
@@ -26,6 +28,7 @@ import org.movabletype.api.client.request.EntrySearchParam;
 import org.movabletype.api.client.request.FolderSearchParam;
 import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
+import org.movabletype.api.client.request.StatSearchParam;
 import org.movabletype.api.client.request.TemplateSearchParam;
 import org.movabletype.api.client.request.UploadParam;
 import org.movabletype.api.client.request.UserSearchParam;
@@ -170,4 +173,17 @@ public interface MovableTypeApiClient {
     FolderItems searchSiblingsFolder(FolderSearchParam search) throws IOException;
 
     FolderItems searchChildFolder(int site_id, int folder_id, int maxDepth, int includeCurrent) throws IOException;
+
+    /******************************************************
+     * Stats
+     ******************************************************/
+    StatItems searchStatVisitPath (StatSearchParam search) throws IOException;
+
+    StatItems searchStatVisitDate (StatSearchParam search) throws IOException;
+
+    StatItems searchStatPageViewPath (StatSearchParam search) throws IOException;
+
+    StatItems searchStatPageViewDate (StatSearchParam search) throws IOException;
+
+    Provider getStatProvider(int site_id) throws IOException;
 }

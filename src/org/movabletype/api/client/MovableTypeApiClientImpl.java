@@ -17,8 +17,10 @@ import org.movabletype.api.client.pojo.CategoryItems;
 import org.movabletype.api.client.pojo.Entry;
 import org.movabletype.api.client.pojo.EntryItems;
 import org.movabletype.api.client.pojo.FolderItems;
+import org.movabletype.api.client.pojo.Provider;
 import org.movabletype.api.client.pojo.Site;
 import org.movabletype.api.client.pojo.SiteItems;
+import org.movabletype.api.client.pojo.StatItems;
 import org.movabletype.api.client.pojo.Status;
 import org.movabletype.api.client.pojo.Template;
 import org.movabletype.api.client.pojo.TemplateItems;
@@ -34,6 +36,7 @@ import org.movabletype.api.client.request.EntrySearchParam;
 import org.movabletype.api.client.request.FolderSearchParam;
 import org.movabletype.api.client.request.SearchParam;
 import org.movabletype.api.client.request.SiteSearchParam;
+import org.movabletype.api.client.request.StatSearchParam;
 import org.movabletype.api.client.request.TemplateSearchParam;
 import org.movabletype.api.client.request.UploadParam;
 import org.movabletype.api.client.request.UserSearchParam;
@@ -934,5 +937,73 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         FolderItems folders = mapper.readValue(conn.getResponseBody(), FolderItems.class);
         conn.disconnect();
         return folders;
+    }
+
+    /******************************************************
+     * Stat
+     ******************************************************/
+
+    @Override
+    public StatItems searchStatVisitPath(StatSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/stats/path/visits?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        StatItems stats = mapper.readValue(conn.getResponseBody(), StatItems.class);
+        conn.disconnect();
+        return stats;
+    }
+
+    @Override
+    public StatItems searchStatVisitDate(StatSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/stats/date/visits?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        StatItems stats = mapper.readValue(conn.getResponseBody(), StatItems.class);
+        conn.disconnect();
+        return stats;
+    }
+
+    @Override
+    public StatItems searchStatPageViewPath(StatSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/stats/path/pageviews?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        StatItems stats = mapper.readValue(conn.getResponseBody(), StatItems.class);
+        conn.disconnect();
+        return stats;
+    }
+
+    @Override
+    public StatItems searchStatPageViewDate(StatSearchParam search) throws IOException {
+        this.getToken();
+        int site_id = search.getSite_id();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/stats/date/pageviews?" + search.getQueryString();
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        StatItems stats = mapper.readValue(conn.getResponseBody(), StatItems.class);
+        conn.disconnect();
+        return stats;
+    }
+
+    @Override
+    public Provider getStatProvider(int site_id) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/stats/provider";
+        conn.connectUrl(url);
+        conn.setRequestMethod("GET");
+        ObjectMapper mapper = new ObjectMapper();
+        Provider provider = mapper.readValue(conn.getResponseBody(), Provider.class);
+        conn.disconnect();
+        return provider;
     }
 }
