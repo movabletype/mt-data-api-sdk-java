@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "status", "createdBy", "updatable", "lockedOut", "isSuperuser", "dateFormat", "systemPermissions", "email", "userpicUrl", "url", "id",
-        "tagDelimiter", "displayName", "modifiedBy", "modifiedDate", "language", "name", "textFormat", "createdDate", "customFields", "password" })
+        "tagDelimiter", "displayName", "modifiedBy", "modifiedDate", "language", "name", "textFormat", "createdDate", "customFields", "password", "apiPassword" })
 public class User {
 
     @JsonProperty("status")
@@ -58,6 +58,8 @@ public class User {
     private List<CustomField> customFields = null;
     @JsonProperty("password")
     private String password;
+    @JsonProperty("apiPassword")
+    private String apiPassword;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -278,6 +280,16 @@ public class User {
     @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @JsonProperty("apiPassword")
+    public String getApiPassword() {
+        return apiPassword;
+    }
+
+    @JsonProperty("apiPassword")
+    public void setApiPassword(String apiPassword) {
+        this.apiPassword = apiPassword;
     }
 
     @JsonAnyGetter
