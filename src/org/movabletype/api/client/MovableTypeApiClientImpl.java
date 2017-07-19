@@ -357,6 +357,22 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
     }
 
     @Override
+    public Entry postEntry(int site_id, Entry entry, int publish) throws IOException {
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries";
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry);
+        conn.addBodyPart("entry=" + json + "&publish=" + Integer.toString(publish));
+        Entry postedEntry = mapper.readValue(conn.getResponseBody(), Entry.class);
+        conn.disconnect();
+        return postedEntry;
+    }
+
+    @Override
     public Entry deleteEntry(int site_id, Integer entry_id) throws IOException {
         this.getToken();
         String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id;
@@ -417,6 +433,23 @@ public class MovableTypeApiClientImpl implements MovableTypeApiClient {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry);
         conn.addBodyPart("entry=" + json);
+        entry = mapper.readValue(conn.getResponseBody(), Entry.class);
+        conn.disconnect();
+        return entry;
+    }
+
+    @Override
+    public Entry updateEntry(int site_id, Entry entry, int publish) throws IOException {
+        int entry_id = entry.getId();
+        this.getToken();
+        String url = endpoint + "/" + version + "/sites/" + site_id + "/entries/" + entry_id;
+        conn.connectUrl(url);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry);
+        conn.addBodyPart("entry=" + json + "&publish=" + Integer.toString(publish));
         entry = mapper.readValue(conn.getResponseBody(), Entry.class);
         conn.disconnect();
         return entry;

@@ -83,6 +83,8 @@ public interface MovableTypeApiClient {
      ******************************************************/
     Entry postEntry(int site_id, Entry entry) throws IOException;
 
+    Entry postEntry(int site_id, Entry entry, int publish) throws IOException;
+
     Entry deleteEntry(int site_id, Integer entry_id) throws IOException;
 
     Entry getEntry(EntrySearchParam search) throws IOException;
@@ -90,6 +92,8 @@ public interface MovableTypeApiClient {
     EntryItems searchEntry(EntrySearchParam search) throws IOException;
 
     Entry updateEntry(int site_id, Entry entry) throws IOException;
+
+    Entry updateEntry(int site_id, Entry entry, int publish) throws IOException;
 
     /******************************************************
      * Asset
