@@ -13,6 +13,7 @@ public class SearchParam {
     String SearchSortBy;
     String SearchResultDisplay;
     int SearchMaxResults;
+    String searchClass = "";
 
     public String getSearch() {
         return search;
@@ -93,6 +94,14 @@ public class SearchParam {
         SearchMaxResults = searchMaxResults;
     }
 
+    public String getSearchClass() {
+        return searchClass;
+    }
+
+    public void setSearchClass(String searchClass) {
+        this.searchClass = searchClass;
+    }
+
     public String getQueryString() {
         LinkedHashMap<String, Object> queryItems = new LinkedHashMap<String, Object>();
         queryItems.put("search", search);
@@ -108,6 +117,8 @@ public class SearchParam {
         queryItems.put("SearchResultDisplay", SearchResultDisplay);
         if (SearchMaxResults != 0)
             queryItems.put("SearchMaxResults", SearchMaxResults);
+        if (searchClass.equals("entry") || searchClass.equals("page"))
+            queryItems.put("class", searchClass);
         return UrlQueryString.buildQueryString(queryItems);
     }
 }
