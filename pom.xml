@@ -4,7 +4,7 @@
 
 	<groupId>com.github.movabletype</groupId>
 	<artifactId>mt-data-api-sdk-java</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
     <packaging>jar</packaging>
 
     <name>mt-data-api-sdk-java</name>
